@@ -51,35 +51,188 @@ function scrambleText(el, finalText, duration = 1200) {
   }, 40);
 }
 
-/* ─── Loader ─────────────────────────────────────────────── */
+/* ─── Loader — canvas liquid fill ────────────────────────── */
 (function initLoader() {
-  const loader = document.getElementById('loader');
+  const loader     = document.getElementById('loader');
   const loaderCount = document.getElementById('loaderCount');
-  const fillRect = document.getElementById('fillRect');
+  const canvas     = document.getElementById('loaderCanvas');
+  const ctx        = canvas.getContext('2d');
+  const dpr        = window.devicePixelRatio || 1;
 
-  const tl = gsap.timeline({
-    onComplete: () => {
-      loader.style.pointerEvents = 'none';
-      initHero();
+  // Offscreen canvas used for the text-mask compositing trick
+  const off    = document.createElement('canvas');
+  const offCtx = off.getContext('2d');
+
+  let W, H, fontSize, textY;
+  let fillProgress = 0; // 0 = empty → 1 = full
+  let time         = 0;
+  let animId;
+
+  // Bubble pool
+  const bubbles = [];
+
+  // ── Setup ──────────────────────────────────────────────────
+  function setup() {
+    const wrap = canvas.parentElement;
+    W = wrap.offsetWidth;
+    H = Math.round(W * 0.33);
+
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+
+    off.width  = W * dpr;
+    off.height = H * dpr;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    offCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    fontSize = Math.min(W * 0.275, 190);
+    textY    = H * 0.79;
+  }
+
+  // ── Text bounding box ──────────────────────────────────────
+  function getBounds() {
+    offCtx.font        = `bold ${fontSize}px Syne, sans-serif`;
+    offCtx.textAlign   = 'center';
+    offCtx.textBaseline = 'alphabetic';
+    const m   = offCtx.measureText('astta');
+    const asc  = m.actualBoundingBoxAscent  ?? fontSize * 0.76;
+    const desc = m.actualBoundingBoxDescent ?? fontSize * 0.08;
+    return {
+      top:    textY - asc,
+      bottom: textY + desc,
+      height: asc + desc,
+      width:  m.width,
+    };
+  }
+
+  // ── Bubble spawner ─────────────────────────────────────────
+  function spawnBubble(bounds) {
+    if (fillProgress < 0.04 || fillProgress > 0.94) return;
+    if (Math.random() > 0.14) return;
+
+    const liquidTop = bounds.bottom - fillProgress * bounds.height;
+    bubbles.push({
+      x:       W / 2 + (Math.random() - 0.5) * bounds.width * 0.68,
+      y:       liquidTop + 6 + Math.random() * Math.min(25, fillProgress * bounds.height * 0.25),
+      r:       0.9 + Math.random() * 2.6,
+      speed:   0.35 + Math.random() * 1.3,
+      opacity: 0.22 + Math.random() * 0.30,
+      phase:   Math.random() * Math.PI * 2,
+    });
+  }
+
+  function updateBubbles(liquidTop) {
+    for (let i = bubbles.length - 1; i >= 0; i--) {
+      const b = bubbles[i];
+      b.y       -= b.speed;
+      b.phase   += 0.09;
+      b.x       += Math.sin(b.phase) * 0.28;
+      b.opacity -= 0.007;
+      if (b.opacity <= 0 || b.y < liquidTop - 4) bubbles.splice(i, 1);
     }
-  });
+  }
 
-  // Sweep white fill from 0 → 900 (full SVG viewBox width)
-  tl.to(fillRect, {
-      attr: { width: 900 },
-      duration: 1.8,
-      ease: 'expo.inOut',
-      onUpdate: function () {
-        const progress = Math.round(this.progress() * 100);
-        loaderCount.textContent = progress + '%';
-      }
-    })
-    .to(loaderCount, { opacity: 0, duration: 0.3, ease: 'power2.in' }, '+=0.15')
-    .to(loader, {
-      yPercent: -100,
-      duration: 1,
-      ease: 'expo.inOut',
-    }, '-=0.1');
+  // ── Draw frame ─────────────────────────────────────────────
+  function draw() {
+    const bounds  = getBounds();
+    const fontStr = `bold ${fontSize}px Syne, sans-serif`;
+
+    // ── Main canvas: only the faint stroke outline
+    ctx.clearRect(0, 0, W, H);
+    ctx.font         = fontStr;
+    ctx.textAlign    = 'center';
+    ctx.textBaseline = 'alphabetic';
+    ctx.strokeStyle  = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth    = 1;
+    ctx.strokeText('astta', W / 2, textY);
+
+    // ── Offscreen: white text → source-in liquid (clips to letters)
+    offCtx.clearRect(0, 0, W, H);
+    offCtx.globalCompositeOperation = 'source-over';
+    offCtx.font         = fontStr;
+    offCtx.textAlign    = 'center';
+    offCtx.textBaseline = 'alphabetic';
+    offCtx.fillStyle    = '#fff';
+    offCtx.fillText('astta', W / 2, textY);
+
+    // Switch: everything drawn from here is clipped to the white text pixels
+    offCtx.globalCompositeOperation = 'source-in';
+
+    const liquidTop = bounds.bottom - fillProgress * bounds.height;
+
+    // Wave amplitude shrinks as bottle fills (surface settles)
+    const amp = Math.max(1.0, 6.0 * (1 - fillProgress * 0.72));
+
+    // Three overlapping sine waves → realistic fluid surface
+    offCtx.beginPath();
+    offCtx.moveTo(-10, H + 10);
+    offCtx.lineTo(-10, liquidTop);
+    for (let x = -10; x <= W + 10; x += 2) {
+      const s1 = Math.sin(x * 0.017 + time * 2.7)  * amp;
+      const s2 = Math.sin(x * 0.033 - time * 1.85) * amp * 0.5;
+      const s3 = Math.sin(x * 0.008 + time * 1.05) * amp * 0.32;
+      offCtx.lineTo(x, liquidTop + s1 + s2 + s3);
+    }
+    offCtx.lineTo(W + 10, H + 10);
+    offCtx.closePath();
+    offCtx.fillStyle = '#fff';
+    offCtx.fill();
+
+    // Bubbles — drawn with source-in, so they are automatically clipped
+    // to the liquid+text intersection (air pockets inside the white liquid)
+    bubbles.forEach(b => {
+      offCtx.beginPath();
+      offCtx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+      // Dark dot = air bubble inside white liquid
+      offCtx.fillStyle = `rgba(0,0,0,${b.opacity})`;
+      offCtx.fill();
+    });
+
+    // ── Composite offscreen onto main canvas
+    ctx.drawImage(off, 0, 0, W, H);
+  }
+
+  // ── Animation loop ─────────────────────────────────────────
+  function tick() {
+    time += 0.016;
+    const bounds    = getBounds();
+    const liquidTop = bounds.bottom - fillProgress * bounds.height;
+    spawnBubble(bounds);
+    updateBubbles(liquidTop);
+    draw();
+    animId = requestAnimationFrame(tick);
+  }
+
+  // ── Bootstrap after fonts are ready ───────────────────────
+  document.fonts.ready.then(() => {
+    setup();
+    tick();
+
+    const prog = { val: 0 };
+    gsap.to(prog, {
+      val: 1,
+      duration: 2.8,
+      ease: 'power1.inOut',
+      delay: 0.2,
+      onUpdate() {
+        fillProgress = prog.val;
+        loaderCount.textContent = Math.round(prog.val * 100) + '%';
+      },
+      onComplete() {
+        cancelAnimationFrame(animId);
+        loader.style.pointerEvents = 'none';
+        gsap.to(loader, {
+          yPercent: -100,
+          duration: 1,
+          ease: 'expo.inOut',
+          onComplete: initHero,
+        });
+      },
+    });
+  });
 })();
 
 /* ─── Custom cursor ────────────────────────────────────────── */

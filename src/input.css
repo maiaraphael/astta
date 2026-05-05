@@ -1045,41 +1045,23 @@ footer {
   gap: 2.5rem;
 }
 
-.loader-svg-wrap {
+.loader-canvas-wrap {
+  width: min(680px, 88vw);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.loader-svg {
-  width: min(700px, 82vw);
+#loaderCanvas {
+  display: block;
+  width: 100%;
   height: auto;
-  overflow: visible;
-}
-
-.loader-text-stroke {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 200px;
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.12);
-  stroke-width: 1.5px;
-  letter-spacing: -0.04em;
-}
-
-.loader-text-fill {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 200px;
-  fill: #ffffff;
-  stroke: none;
-  letter-spacing: -0.04em;
 }
 
 .loader-count {
   font-size: 0.65rem;
   letter-spacing: 0.25em;
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.22);
   font-family: var(--font-sans);
 }
 
