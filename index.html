@@ -28,11 +28,18 @@
 
   <!-- Loader -->
   <div id="loader" role="status" aria-label="Carregando">
-    <div class="loader-logo">
-      <span>astta</span>
-    </div>
-    <div class="loader-bar-wrap">
-      <div class="loader-bar" id="loaderBar"></div>
+    <div class="loader-svg-wrap">
+      <svg class="loader-svg" viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <clipPath id="fillClip">
+            <rect id="fillRect" x="0" y="0" width="0" height="220"/>
+          </clipPath>
+        </defs>
+        <!-- Outline only -->
+        <text class="loader-text-stroke" x="450" y="185" text-anchor="middle">astta</text>
+        <!-- White fill, revealed left→right -->
+        <text class="loader-text-fill" x="450" y="185" text-anchor="middle" clip-path="url(#fillClip)">astta</text>
+      </svg>
     </div>
     <div class="loader-count" id="loaderCount">0%</div>
   </div>

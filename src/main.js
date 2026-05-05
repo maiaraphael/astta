@@ -54,9 +54,8 @@ function scrambleText(el, finalText, duration = 1200) {
 /* ─── Loader ─────────────────────────────────────────────── */
 (function initLoader() {
   const loader = document.getElementById('loader');
-  const loaderBar = document.getElementById('loaderBar');
   const loaderCount = document.getElementById('loaderCount');
-  const loaderLogo = document.querySelector('.loader-logo span');
+  const fillRect = document.getElementById('fillRect');
 
   const tl = gsap.timeline({
     onComplete: () => {
@@ -65,17 +64,17 @@ function scrambleText(el, finalText, duration = 1200) {
     }
   });
 
-  tl.to(loaderLogo, { y: '0%', duration: 0.8, ease: 'expo.out', delay: 0.2 })
-    .to(loaderBar, {
-      scaleX: 1,
-      duration: 1.2,
+  // Sweep white fill from 0 → 900 (full SVG viewBox width)
+  tl.to(fillRect, {
+      attr: { width: 900 },
+      duration: 1.8,
       ease: 'expo.inOut',
       onUpdate: function () {
         const progress = Math.round(this.progress() * 100);
         loaderCount.textContent = progress + '%';
       }
-    }, '-=0.3')
-    .to([loaderBar, loaderLogo, loaderCount], { opacity: 0, duration: 0.4, ease: 'power2.in' }, '+=0.2')
+    })
+    .to(loaderCount, { opacity: 0, duration: 0.3, ease: 'power2.in' }, '+=0.15')
     .to(loader, {
       yPercent: -100,
       duration: 1,
