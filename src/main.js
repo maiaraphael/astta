@@ -735,3 +735,80 @@ function initHero() {
   logo.setAttribute('data-text', logo.textContent);
   logo.classList.add('glitch');
 })();
+
+/* ─── Hamburger mobile menu ────────────────────────────────── */
+(function initHamburger() {
+  const btn   = document.getElementById('hamburger');
+  const menu  = document.getElementById('mobileMenu');
+  const links = document.querySelectorAll('.mobile-link');
+  const cta   = menu && menu.querySelector('.mobile-cta');
+  const foot  = menu && menu.querySelector('.mobile-menu-foot');
+  if (!btn || !menu) return;
+
+  let isOpen = false;
+  let openTl = null;
+
+  function openMenu() {
+    isOpen = true;
+    btn.classList.add('is-open');
+    menu.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+    menu.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    if (openTl) openTl.kill();
+    openTl = gsap.timeline();
+    openTl
+      .fromTo(menu, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power2.out' })
+      .fromTo(links,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 0.55, ease: 'expo.out', stagger: 0.07 },
+        '-=0.2'
+      )
+      .fromTo([cta, foot].filter(Boolean),
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.4, ease: 'expo.out', stagger: 0.1 },
+        '-=0.2'
+      );
+  }
+
+  function closeMenu() {
+    isOpen = false;
+    btn.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+
+    if (openTl) openTl.kill();
+    gsap.to(menu, {
+      opacity: 0, duration: 0.3, ease: 'power2.in',
+      onComplete: () => {
+        menu.classList.remove('is-open');
+        menu.setAttribute('aria-hidden', 'true');
+        // Reset link positions for next open
+        gsap.set([...links, cta, foot].filter(Boolean), { opacity: 0, y: 40 });
+        gsap.set([cta, foot].filter(Boolean), { y: 20 });
+      }
+    });
+  }
+
+  btn.addEventListener('click', () => isOpen ? closeMenu() : openMenu());
+
+  // Close on any mobile link click
+  menu.querySelectorAll('.mobile-link, .mobile-cta').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && isOpen) closeMenu();
+  });
+})();
+
+/* ─── Tab FOMO title ───────────────────────────────────────── */
+(function initTabFomo() {
+  const original = document.title;
+  const away     = '👀 Ainda por aqui? — Astta';
+  document.addEventListener('visibilitychange', () => {
+    document.title = document.hidden ? away : original;
+  });
+})();

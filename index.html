@@ -44,7 +44,26 @@
       <li><a href="#process">Processo</a></li>
     </ul>
     <a href="#contact" class="nav-cta magnetic">Iniciar Projeto</a>
+
+    <!-- Hamburger (mobile only) -->
+    <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span class="ham-line ham-line--top"></span>
+      <span class="ham-line ham-line--mid"></span>
+      <span class="ham-line ham-line--bot"></span>
+    </button>
   </nav>
+
+  <!-- Mobile menu overlay -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true" role="dialog" aria-label="Menu de navegação">
+    <nav class="mobile-menu-nav">
+      <a href="#about"   class="mobile-link" data-index="0">Estúdio</a>
+      <a href="#services" class="mobile-link" data-index="1">Serviços</a>
+      <a href="#works"   class="mobile-link" data-index="2">Trabalhos</a>
+      <a href="#process"  class="mobile-link" data-index="3">Processo</a>
+    </nav>
+    <a href="#contact" class="mobile-cta">Iniciar Projeto →</a>
+    <div class="mobile-menu-foot">hello@astta.com.br · +55 (11) 99999-9999</div>
+  </div>
 
   <!-- HERO -->
   <section class="hero" id="hero" aria-label="Apresentação">
