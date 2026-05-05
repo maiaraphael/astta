@@ -54,7 +54,6 @@ function scrambleText(el, finalText, duration = 1200) {
 /* ─── Loader — canvas liquid fill ────────────────────────── */
 (function initLoader() {
   const loader     = document.getElementById('loader');
-  const loaderCount = document.getElementById('loaderCount');
   const canvas     = document.getElementById('loaderCanvas');
   const ctx        = canvas.getContext('2d');
   const dpr        = window.devicePixelRatio || 1;
@@ -220,7 +219,6 @@ function scrambleText(el, finalText, duration = 1200) {
       delay: 0.2,
       onUpdate() {
         fillProgress = prog.val;
-        loaderCount.textContent = Math.round(prog.val * 100) + '%';
       },
       onComplete() {
         cancelAnimationFrame(animId);
