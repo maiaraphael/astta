@@ -61,7 +61,7 @@ function scrambleText(el, finalText, duration = 1200) {
   const tl = gsap.timeline({
     onComplete: () => {
       loader.style.pointerEvents = 'none';
-      initIntro3D();
+      initHero();
     }
   });
 
@@ -133,85 +133,53 @@ function scrambleText(el, finalText, duration = 1200) {
   });
 })();
 
-/* ─── Intro 3D — scroll-driven rotation ───────────────────── */
-function initIntro3D() {
+/* ─── Intro 3D — scroll-driven between About & Services ───── */
+(function initIntro3D() {
   const word = document.getElementById('intro3dWord');
-  const scene = document.querySelector('.intro-3d-scene');
-  const hint = document.getElementById('intro3dHint');
+  if (!word) return;
 
-  // Camera perspective state — starts far, zooms in during scroll
   const camera = { perspective: 420 };
+  gsap.set(word, { transformPerspective: 420, transformOrigin: '50% 50%', opacity: 0, scale: 0.85 });
 
-  // Set initial transformPerspective on the word for crisp 3D
-  gsap.set(word, { transformPerspective: 420, transformOrigin: '50% 50%' });
+  // Fade in as section enters viewport
+  ScrollTrigger.create({
+    trigger: '#intro-3d',
+    start: 'top 80%',
+    once: true,
+    onEnter: () => {
+      gsap.to(word, { opacity: 1, scale: 1, duration: 1.2, ease: 'expo.out' });
+    }
+  });
 
-  // Entrance: word fades in cleanly
-  const entranceTl = gsap.timeline();
-  entranceTl
-    .fromTo(word,
-      { opacity: 0, y: 60, rotateX: -20 },
-      { opacity: 1, y: 0, rotateX: 0, duration: 1.5, ease: 'expo.out' }
-    )
-    .fromTo(hint,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.8, ease: 'expo.out' },
-      '-=0.5'
-    );
-
-  // Scroll-driven — pinned for 320vh = more cinematic breathing room
+  // Scroll-driven 3D rotation — pinned for 300vh
   const scrollTl = gsap.timeline({
     scrollTrigger: {
       trigger: '#intro-3d',
       start: 'top top',
-      end: '+=320%',
+      end: '+=300%',
       pin: true,
-      scrub: 2.5,          // higher = smoother, more buttery
+      scrub: 2.5,
       anticipatePin: 1,
     }
   });
 
   scrollTl
-    // Hint fades immediately
-    .to(hint, { opacity: 0, y: -15, duration: 0.08, ease: 'none' }, 0)
-
-    // Camera zooms in: perspective shrinks = viewer rushes toward word
+    // Camera zooms in
     .to(camera, {
       perspective: 90,
       duration: 0.78,
       ease: 'none',
-      onUpdate: () => {
-        gsap.set(word, { transformPerspective: camera.perspective });
-      }
+      onUpdate: () => gsap.set(word, { transformPerspective: camera.perspective })
     }, 0)
-
-    // One clean 360° Y rotation — no extra tilt on X so it reads as a single confident spin
-    .to(word, {
-      rotateY: 360,
-      duration: 0.78,
-      ease: 'none',
-    }, 0)
-
-    // Final burst: scale up huge + blur + fade — camera "flies through" the word
-    .to(word, {
-      scale: 2.8,
-      opacity: 0,
-      filter: 'blur(40px)',
-      duration: 0.22,
-      ease: 'power3.in',
-    }, 0.78);
-
-  // Hero entrance fires when it enters the viewport after unpin
-  ScrollTrigger.create({
-    trigger: '#hero',
-    start: 'top 80%',
-    once: true,
-    onEnter: initHero,
-  });
-}
+    // Single 360° Y spin
+    .to(word, { rotateY: 360, duration: 0.78, ease: 'none' }, 0)
+    // Burst exit: scale up + blur + fade
+    .to(word, { scale: 2.8, opacity: 0, filter: 'blur(40px)', duration: 0.22, ease: 'power3.in' }, 0.78);
+})();
 
 /* ─── Hero animations ──────────────────────────────────────── */
 function initHero() {
-  const heroTl = gsap.timeline();
+  const heroTl = gsap.timeline({ delay: 0.1 });
 
   // Animate each word in hero title
   const words = document.querySelectorAll('.hero-title .word');
