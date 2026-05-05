@@ -333,11 +333,33 @@ function scrambleText(el, finalText, duration = 1200) {
   });
   gsap.set(glow, { opacity: 0 });
 
-  // ── Master scroll timeline ─────────────────────────────────
+  // Pre-arrival: as section enters viewport, nudge chars toward center so they're
+  // already mid-flight by the time the pin locks at top top
+  ScrollTrigger.create({
+    trigger: section,
+    start: 'top 90%',
+    end: 'top top',
+    scrub: 2,
+    onUpdate: (self) => {
+      const p = self.progress;
+      charEls.forEach((ch, i) => {
+        gsap.set(ch, {
+          x: origins[i].x * (1 - p * 0.55),
+          y: origins[i].y * (1 - p * 0.55),
+          rotateZ: origins[i].rotateZ * (1 - p * 0.55),
+          scale: origins[i].scale + (1 - origins[i].scale) * p * 0.45,
+          opacity: p * 0.55,
+          filter: `blur(${35 * (1 - p * 0.5)}px)`,
+        });
+      });
+    }
+  });
+
+  // ── Master scroll timeline — pin starts at top top ──────────
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: section,
-      start: 'top 75%',
+      start: 'top top',
       end: '+=420%',
       pin: true,
       scrub: 1.6,
