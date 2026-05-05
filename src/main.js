@@ -94,7 +94,7 @@ function scrambleText(el, finalText, duration = 1200) {
 
   // ── Text bounding box ──────────────────────────────────────
   function getBounds() {
-    offCtx.font        = `bold ${fontSize}px Syne, sans-serif`;
+    offCtx.font        = `800 ${fontSize}px 'Plus Jakarta Sans', sans-serif`;
     offCtx.textAlign   = 'center';
     offCtx.textBaseline = 'alphabetic';
     const m   = offCtx.measureText('astta');
@@ -138,7 +138,7 @@ function scrambleText(el, finalText, duration = 1200) {
   // ── Draw frame ─────────────────────────────────────────────
   function draw() {
     const bounds  = getBounds();
-    const fontStr = `bold ${fontSize}px Syne, sans-serif`;
+    const fontStr = `800 ${fontSize}px 'Plus Jakarta Sans', sans-serif`;
 
     // ── Main canvas: only the faint stroke outline
     ctx.clearRect(0, 0, W, H);
