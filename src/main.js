@@ -288,46 +288,90 @@ function scrambleText(el, finalText, duration = 1200) {
 
 /* ─── Intro 3D — scroll-driven between About & Services ───── */
 (function initIntro3D() {
-  const word = document.getElementById('intro3dWord');
-  if (!word) return;
+  const section = document.getElementById('intro-3d');
+  const word    = document.getElementById('intro3dWord');
+  if (!word || !section) return;
 
-  const camera = { perspective: 420 };
-  gsap.set(word, { transformPerspective: 420, transformOrigin: '50% 50%', opacity: 0, scale: 0.85 });
+  // Inject glow element
+  const scene = section.querySelector('.intro-3d-scene');
+  const glow  = document.createElement('div');
+  glow.className = 'intro-3d-glow';
+  scene.appendChild(glow);
 
-  // Fade in as section enters viewport
-  ScrollTrigger.create({
-    trigger: '#intro-3d',
-    start: 'top 80%',
-    once: true,
-    onEnter: () => {
-      gsap.to(word, { opacity: 1, scale: 1, duration: 1.2, ease: 'expo.out' });
-    }
+  // Split "astta" into individual char spans
+  word.textContent = '';
+  const charEls = Array.from('astta').map(ch => {
+    const span = document.createElement('span');
+    span.className = 'intro-char';
+    span.textContent = ch;
+    word.appendChild(span);
+    return span;
   });
 
-  // Scroll-driven 3D rotation — pinned for 300vh
-  const scrollTl = gsap.timeline({
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+
+  // Where each letter arrives FROM (off-screen corners / extremes)
+  const origins = [
+    { x: -W * 1.4, y: -H * 0.75, rotateZ: -50, scale: 0.3 }, // 'a' — top-left
+    { x:  W * 0.6, y: -H * 1.3,  rotateZ:  30, scale: 0.3 }, // 's' — top-right
+    { x:  0,        y:  0,         rotateZ: 180, scale: 0   }, // 't' — center, born spinning
+    { x: -W * 0.6, y:  H * 1.3,  rotateZ: -30, scale: 0.3 }, // 't' — bottom-left
+    { x:  W * 1.4, y:  H * 0.75, rotateZ:  50, scale: 0.3 }, // 'a' — bottom-right
+  ];
+
+  // Where each letter EXITS to (starburst scatter)
+  const exits = [
+    { x: -W * 1.0, y: -H * 1.2, rotateZ: -110, scale: 5  },
+    { x:  W * 0.4, y: -H * 1.5, rotateZ:   50, scale: 4  },
+    { x:  0,        y:  0,        rotateZ:    0, scale: 16 }, // center 't' fills screen
+    { x: -W * 0.4, y:  H * 1.5, rotateZ:  -50, scale: 4  },
+    { x:  W * 1.0, y:  H * 1.2, rotateZ:  110, scale: 5  },
+  ];
+
+  // Set initial state — all invisible, at their origin positions
+  charEls.forEach((ch, i) => {
+    gsap.set(ch, { x: origins[i].x, y: origins[i].y, rotateZ: origins[i].rotateZ, scale: origins[i].scale, opacity: 0, filter: 'blur(35px)' });
+  });
+  gsap.set(glow, { opacity: 0 });
+
+  // ── Master scroll timeline ─────────────────────────────────
+  const tl = gsap.timeline({
     scrollTrigger: {
-      trigger: '#intro-3d',
+      trigger: section,
       start: 'top top',
-      end: '+=300%',
+      end: '+=420%',
       pin: true,
-      scrub: 2.5,
+      scrub: 1.6,
       anticipatePin: 1,
     }
   });
 
-  scrollTl
-    // Camera zooms in
-    .to(camera, {
-      perspective: 90,
-      duration: 0.78,
-      ease: 'none',
-      onUpdate: () => gsap.set(word, { transformPerspective: camera.perspective })
-    }, 0)
-    // Single 360° Y spin
-    .to(word, { rotateY: 360, duration: 0.78, ease: 'none' }, 0)
-    // Burst exit: scale up + blur + fade
-    .to(word, { scale: 2.8, opacity: 0, filter: 'blur(40px)', duration: 0.22, ease: 'power3.in' }, 0.78);
+  // Phase 1 — Arrival: each char flies in from its corner (staggered)
+  charEls.forEach((ch, i) => {
+    tl.to(ch,
+      { x: 0, y: 0, rotateZ: 0, scale: 1, opacity: 1, filter: 'blur(0px)', duration: 4, ease: 'expo.out' },
+      i * 0.55 // stagger start times
+    );
+  });
+
+  // Glow pulses on at peak assembly
+  tl.to(glow, { opacity: 1, duration: 0.6, ease: 'power2.out' }, 4.5);
+
+  // Phase 2 — Dwell: word breathes once, very subtle
+  tl.to(charEls, { scaleY: 1.06, skewX: 3,  duration: 0.5, ease: 'power1.inOut', stagger: 0.07 }, 5.2);
+  tl.to(charEls, { scaleY: 1,    skewX: 0,  duration: 0.5, ease: 'power1.inOut', stagger: 0.07 }, 5.9);
+
+  // Glow fades
+  tl.to(glow, { opacity: 0, duration: 0.8, ease: 'power2.in' }, 6.2);
+
+  // Phase 3 — Scatter: starburst exit, each char flies to its corner
+  charEls.forEach((ch, i) => {
+    tl.to(ch,
+      { x: exits[i].x, y: exits[i].y, rotateZ: exits[i].rotateZ, scale: exits[i].scale, opacity: 0, filter: 'blur(30px)', duration: 3.8, ease: 'power3.in' },
+      7 + i * 0.18
+    );
+  });
 })();
 
 /* ─── Hero animations ──────────────────────────────────────── */
