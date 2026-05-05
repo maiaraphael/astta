@@ -337,7 +337,7 @@ function scrambleText(el, finalText, duration = 1200) {
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: section,
-      start: 'top top',
+      start: 'top 75%',
       end: '+=420%',
       pin: true,
       scrub: 1.6,
