@@ -525,16 +525,20 @@ nav {
 
 .about-title {
   font-family: var(--font-display);
-  font-size: var(--text-section);
+  font-size: clamp(1.55rem, 4.5vw, 4.5rem);
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.12;
   letter-spacing: -0.03em;
   color: #fff;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .about-title em {
   font-style: italic;
   color: rgba(255,255,255,0.3);
+  white-space: nowrap;
 }
 
 .about-right {
