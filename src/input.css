@@ -131,7 +131,79 @@ body {
   animation: scrollLine 2s ease-in-out infinite;
 }
 
-/* Noise overlay */
+/* ─── Scroll progress bar ────────────────────────────────── */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: #fff;
+  z-index: 9000;
+  pointer-events: none;
+  transform-origin: left;
+}
+
+/* ─── Floating orbs ──────────────────────────────────────── */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: 0;
+  will-change: transform;
+}
+
+.orb-1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);
+  top: 15%;
+  right: 10%;
+}
+
+.orb-2 {
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+  bottom: 20%;
+  left: 5%;
+}
+
+.orb-3 {
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  top: 45%;
+  left: 40%;
+}
+
+/* ─── Split title chars ──────────────────────────────────── */
+.split-title .char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* ─── Marquee reverse track ──────────────────────────────── */
+.marquee-track--reverse {
+  animation-direction: reverse;
+  margin-top: 0.75rem;
+}
+
+/* ─── Work card clip reveal ──────────────────────────────── */
+.work-card-clip {
+  width: 100%;
+  height: 100%;
+  clip-path: inset(100% 0 0 0);
+  will-change: clip-path;
+}
+
+/* ─── Scramble chars ─────────────────────────────────────── */
+.scramble-text {
+  display: inline-block;
+}
+
+/* ─── Noise overlay */
 .noise {
   position: fixed;
   inset: 0;

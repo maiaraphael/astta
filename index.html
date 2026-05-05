@@ -19,6 +19,9 @@
   <!-- Noise overlay -->
   <div class="noise" aria-hidden="true"></div>
 
+  <!-- Scroll progress bar -->
+  <div id="scroll-progress" aria-hidden="true"></div>
+
   <!-- Custom cursor -->
   <div class="cursor" id="cursor" aria-hidden="true"></div>
   <div class="cursor-follower" id="cursorFollower" aria-hidden="true"></div>
@@ -61,6 +64,10 @@
   <section class="hero" id="hero" aria-label="Apresentação">
     <div class="hero-bg-grid" aria-hidden="true"></div>
     <div class="hero-bg-gradient" aria-hidden="true"></div>
+    <!-- Floating ambient orbs -->
+    <div class="orb orb-1" aria-hidden="true"></div>
+    <div class="orb orb-2" aria-hidden="true"></div>
+    <div class="orb orb-3" aria-hidden="true"></div>
 
     <div class="hero-eyebrow" aria-hidden="true">
       Estúdio Digital — Fundado em 2024
@@ -120,6 +127,20 @@
       <span>SEO Técnico</span><span class="dot">·</span>
       <span>Performance</span><span class="dot">·</span>
     </div>
+    <div class="marquee-track marquee-track--reverse">
+      <span>Awwwards</span><span class="dot">·</span>
+      <span>CSS Design Awards</span><span class="dot">·</span>
+      <span>FWA</span><span class="dot">·</span>
+      <span>Webby Awards</span><span class="dot">·</span>
+      <span>Awwwards SOTD</span><span class="dot">·</span>
+      <span>Site of the Year</span><span class="dot">·</span>
+      <span>Awwwards</span><span class="dot">·</span>
+      <span>CSS Design Awards</span><span class="dot">·</span>
+      <span>FWA</span><span class="dot">·</span>
+      <span>Webby Awards</span><span class="dot">·</span>
+      <span>Awwwards SOTD</span><span class="dot">·</span>
+      <span>Site of the Year</span><span class="dot">·</span>
+    </div>
   </div>
 
   <!-- ABOUT -->
@@ -127,7 +148,7 @@
     <div class="section-label reveal" data-num="01">Sobre o Estúdio</div>
     <div class="about-grid">
       <div>
-        <h2 class="about-title reveal">
+        <h2 class="about-title split-title" data-split>
           Não fazemos <em>apenas</em> websites.<br>
           Criamos <em>monumentos</em> digitais.
         </h2>
@@ -166,7 +187,7 @@
     <div class="services-header">
       <div>
         <div class="section-label reveal" data-num="02">O que fazemos</div>
-        <h2 class="services-title reveal">Serviços</h2>
+        <h2 class="services-title split-title" data-split>Serviços</h2>
       </div>
       <p class="about-text reveal" style="max-width: 280px; text-align: right;">
         Cada serviço é entregue com obsessão pelos detalhes e um padrão de qualidade que supera expectativas.
@@ -232,7 +253,7 @@
     <div class="works-header">
       <div>
         <div class="section-label reveal" data-num="03">Portfólio</div>
-        <h2 class="works-title reveal">Projetos<br>Selecionados</h2>
+        <h2 class="works-title split-title" data-split>Projetos<br>Selecionados</h2>
       </div>
       <a href="#contact" class="btn-ghost reveal">
         Ver todos os projetos
@@ -244,7 +265,8 @@
 
     <div class="works-grid">
       <!-- Card 1 - Featured -->
-      <div class="work-card reveal-scale" tabindex="0" role="article" aria-label="Projeto Nexus Collective">
+      <div class="work-card" tabindex="0" role="article" aria-label="Projeto Nexus Collective">
+        <div class="work-card-clip">
         <div class="work-placeholder">
           <div class="work-placeholder-icon" aria-hidden="true">
             <svg viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="10" height="10" stroke="currentColor" stroke-width="1"/><rect x="18" y="4" width="10" height="10" stroke="currentColor" stroke-width="1"/><rect x="4" y="18" width="10" height="10" stroke="currentColor" stroke-width="1"/><rect x="18" y="18" width="10" height="10" stroke="currentColor" stroke-width="1"/></svg>
@@ -254,10 +276,12 @@
           <div class="work-card-tag">Branding + Web Design + Dev</div>
           <div class="work-card-title">Nexus Collective — Plataforma de IA</div>
         </div>
+        </div>
       </div>
 
       <!-- Card 2 -->
-      <div class="work-card reveal-scale" tabindex="0" role="article" aria-label="Projeto Forma Studio">
+      <div class="work-card" tabindex="0" role="article" aria-label="Projeto Forma Studio">
+        <div class="work-card-clip">
         <div class="work-placeholder">
           <div class="work-placeholder-icon" aria-hidden="true">
             <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="10" stroke="currentColor" stroke-width="1"/><circle cx="16" cy="16" r="5" stroke="currentColor" stroke-width="1"/><line x1="16" y1="6" x2="16" y2="26" stroke="currentColor" stroke-width="1"/></svg>
@@ -267,10 +291,12 @@
           <div class="work-card-tag">UI/UX + Motion</div>
           <div class="work-card-title">Forma Studio — Arquitetura</div>
         </div>
+        </div>
       </div>
 
       <!-- Card 3 -->
-      <div class="work-card reveal-scale" tabindex="0" role="article" aria-label="Projeto Lumina E-commerce">
+      <div class="work-card" tabindex="0" role="article" aria-label="Projeto Lumina E-commerce">
+        <div class="work-card-clip">
         <div class="work-placeholder">
           <div class="work-placeholder-icon" aria-hidden="true">
             <svg viewBox="0 0 32 32" fill="none"><polygon points="16,4 28,24 4,24" stroke="currentColor" stroke-width="1" fill="none"/><line x1="16" y1="4" x2="16" y2="24" stroke="currentColor" stroke-width="1"/></svg>
@@ -280,6 +306,7 @@
           <div class="work-card-tag">E-commerce + Dev</div>
           <div class="work-card-title">Lumina — Moda Sustentável</div>
         </div>
+        </div>
       </div>
     </div>
   </section>
@@ -287,7 +314,7 @@
   <!-- PROCESS -->
   <section class="process-section" id="process" aria-label="Processo de trabalho">
     <div class="section-label reveal" data-num="04">Como trabalhamos</div>
-    <h2 class="services-title reveal" style="margin-bottom: 0;">Processo</h2>
+    <h2 class="services-title split-title" data-split style="margin-bottom: 0;">Processo</h2>
 
     <div class="process-grid">
       <div class="process-item reveal">
@@ -328,7 +355,7 @@
   <section class="cta-section" id="contact" aria-label="Iniciar projeto">
     <div class="cta-bg" aria-hidden="true"></div>
     <div class="section-label reveal" data-num="06" style="justify-content: center; margin-bottom: 3rem;">Vamos trabalhar juntos</div>
-    <h2 class="cta-title reveal">
+    <h2 class="cta-title split-title" data-split>
       Pronto para<br>
       <em>impressionar</em><br>
       o mundo?
