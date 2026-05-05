@@ -181,8 +181,9 @@ function scrambleText(el, finalText, duration = 1200) {
     offCtx.fillStyle = '#fff';
     offCtx.fill();
 
-    // Bubbles — drawn with source-in, so they are automatically clipped
-    // to the liquid+text intersection (air pockets inside the white liquid)
+    // Bubbles — destination-out cuts transparent holes in the white liquid
+    // (shows black background through = air bubbles inside liquid)
+    offCtx.globalCompositeOperation = 'destination-out';
     bubbles.forEach(b => {
       offCtx.beginPath();
       offCtx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
