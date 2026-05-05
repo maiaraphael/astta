@@ -85,14 +85,21 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 /* ─── Intro 3D — scroll-driven rotation ───────────────────── */
 function initIntro3D() {
   const word = document.getElementById('intro3dWord');
+  const scene = document.querySelector('.intro-3d-scene');
   const hint = document.getElementById('intro3dHint');
 
-  // Entrance: word rises from below after loader
+  // Camera perspective state — starts far, zooms in during scroll
+  const camera = { perspective: 420 };
+
+  // Set initial transformPerspective on the word for crisp 3D
+  gsap.set(word, { transformPerspective: 420, transformOrigin: '50% 50%' });
+
+  // Entrance: word fades in cleanly
   const entranceTl = gsap.timeline();
   entranceTl
     .fromTo(word,
-      { opacity: 0, y: 80, rotateX: -30, scale: 0.85 },
-      { opacity: 1, y: 0, rotateX: 0, scale: 1, duration: 1.4, ease: 'expo.out' }
+      { opacity: 0, y: 60, rotateX: -20 },
+      { opacity: 1, y: 0, rotateX: 0, duration: 1.5, ease: 'expo.out' }
     )
     .fromTo(hint,
       { opacity: 0, y: 20 },
@@ -100,41 +107,49 @@ function initIntro3D() {
       '-=0.5'
     );
 
-  // Scroll-driven 3D rotation — pin for 3x viewport height
+  // Scroll-driven — pinned for 320vh = more cinematic breathing room
   const scrollTl = gsap.timeline({
     scrollTrigger: {
       trigger: '#intro-3d',
       start: 'top top',
-      end: '+=280%',
+      end: '+=320%',
       pin: true,
-      scrub: 1.8,
+      scrub: 2.5,          // higher = smoother, more buttery
       anticipatePin: 1,
     }
   });
 
-  // Phase 1 (0 → 50%): hint fades, rotation begins
   scrollTl
-    .to(hint, { opacity: 0, y: -20, duration: 0.1, ease: 'none' }, 0)
+    // Hint fades immediately
+    .to(hint, { opacity: 0, y: -15, duration: 0.08, ease: 'none' }, 0)
 
-    // Phase 2 (0 → 75%): full 360° Y rotation with X tilt
+    // Camera zooms in: perspective shrinks = viewer rushes toward word
+    .to(camera, {
+      perspective: 90,
+      duration: 0.78,
+      ease: 'none',
+      onUpdate: () => {
+        gsap.set(word, { transformPerspective: camera.perspective });
+      }
+    }, 0)
+
+    // One clean 360° Y rotation — no extra tilt on X so it reads as a single confident spin
     .to(word, {
       rotateY: 360,
-      rotateX: 18,
-      scale: 1.05,
-      duration: 0.75,
+      duration: 0.78,
       ease: 'none',
     }, 0)
 
-    // Phase 3 (75% → 100%): scale up + fade out — reveals hero
+    // Final burst: scale up huge + blur + fade — camera "flies through" the word
     .to(word, {
-      scale: 1.6,
+      scale: 2.8,
       opacity: 0,
-      filter: 'blur(20px)',
-      duration: 0.25,
-      ease: 'power2.in',
-    }, 0.75);
+      filter: 'blur(40px)',
+      duration: 0.22,
+      ease: 'power3.in',
+    }, 0.78);
 
-  // After intro unpins, animate hero title with ScrollTrigger
+  // Hero entrance fires when it enters the viewport after unpin
   ScrollTrigger.create({
     trigger: '#hero',
     start: 'top 80%',
