@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
   const tl = gsap.timeline({
     onComplete: () => {
       loader.style.pointerEvents = 'none';
-      initHero();
+      initIntro3D();
     }
   });
 
@@ -82,9 +82,70 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
   });
 })();
 
+/* ─── Intro 3D — scroll-driven rotation ───────────────────── */
+function initIntro3D() {
+  const word = document.getElementById('intro3dWord');
+  const hint = document.getElementById('intro3dHint');
+
+  // Entrance: word rises from below after loader
+  const entranceTl = gsap.timeline();
+  entranceTl
+    .fromTo(word,
+      { opacity: 0, y: 80, rotateX: -30, scale: 0.85 },
+      { opacity: 1, y: 0, rotateX: 0, scale: 1, duration: 1.4, ease: 'expo.out' }
+    )
+    .fromTo(hint,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8, ease: 'expo.out' },
+      '-=0.5'
+    );
+
+  // Scroll-driven 3D rotation — pin for 3x viewport height
+  const scrollTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '#intro-3d',
+      start: 'top top',
+      end: '+=280%',
+      pin: true,
+      scrub: 1.8,
+      anticipatePin: 1,
+    }
+  });
+
+  // Phase 1 (0 → 50%): hint fades, rotation begins
+  scrollTl
+    .to(hint, { opacity: 0, y: -20, duration: 0.1, ease: 'none' }, 0)
+
+    // Phase 2 (0 → 75%): full 360° Y rotation with X tilt
+    .to(word, {
+      rotateY: 360,
+      rotateX: 18,
+      scale: 1.05,
+      duration: 0.75,
+      ease: 'none',
+    }, 0)
+
+    // Phase 3 (75% → 100%): scale up + fade out — reveals hero
+    .to(word, {
+      scale: 1.6,
+      opacity: 0,
+      filter: 'blur(20px)',
+      duration: 0.25,
+      ease: 'power2.in',
+    }, 0.75);
+
+  // After intro unpins, animate hero title with ScrollTrigger
+  ScrollTrigger.create({
+    trigger: '#hero',
+    start: 'top 80%',
+    once: true,
+    onEnter: initHero,
+  });
+}
+
 /* ─── Hero animations ──────────────────────────────────────── */
 function initHero() {
-  const heroTl = gsap.timeline({ delay: 0.1 });
+  const heroTl = gsap.timeline();
 
   // Animate each word in hero title
   const words = document.querySelectorAll('.hero-title .word');
