@@ -135,27 +135,43 @@ function scrambleText(el, finalText, duration = 1200) {
   }
 
   // ── Draw frame ─────────────────────────────────────────────
+  // Per-character float — each letter bobs on its own sine wave
+  function charFloatY(i) {
+    return Math.sin(time * 1.6 + i * 1.15) * 6;
+  }
+
+  // Draw "astta" char-by-char so each letter can have its own Y offset
+  function drawCharsFloat(context, mode /* 'fill' | 'stroke' */) {
+    const fontStr = `800 ${fontSize}px 'Plus Jakarta Sans', sans-serif`;
+    context.font         = fontStr;
+    context.textAlign    = 'left';
+    context.textBaseline = 'alphabetic';
+    const chars  = ['a','s','t','t','a'];
+    const totalW = context.measureText('astta').width;
+    let cx = W / 2 - totalW / 2;
+    chars.forEach((ch, i) => {
+      const y = textY + charFloatY(i);
+      if (mode === 'fill')   context.fillText(ch, cx, y);
+      else                   context.strokeText(ch, cx, y);
+      cx += context.measureText(ch).width;
+    });
+  }
+
   function draw() {
     const bounds  = getBounds();
     const fontStr = `800 ${fontSize}px 'Plus Jakarta Sans', sans-serif`;
 
     // ── Main canvas: only the faint stroke outline
     ctx.clearRect(0, 0, W, H);
-    ctx.font         = fontStr;
-    ctx.textAlign    = 'center';
-    ctx.textBaseline = 'alphabetic';
     ctx.strokeStyle  = 'rgba(255,255,255,0.08)';
     ctx.lineWidth    = 1;
-    ctx.strokeText('astta', W / 2, textY);
+    drawCharsFloat(ctx, 'stroke');
 
     // ── Offscreen: white text → source-in liquid (clips to letters)
     offCtx.clearRect(0, 0, W, H);
     offCtx.globalCompositeOperation = 'source-over';
-    offCtx.font         = fontStr;
-    offCtx.textAlign    = 'center';
-    offCtx.textBaseline = 'alphabetic';
     offCtx.fillStyle    = '#fff';
-    offCtx.fillText('astta', W / 2, textY);
+    drawCharsFloat(offCtx, 'fill');
 
     // Switch: everything drawn from here is clipped to the white text pixels
     offCtx.globalCompositeOperation = 'source-in';
