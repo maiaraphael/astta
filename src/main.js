@@ -343,6 +343,14 @@ function scrambleText(el, finalText, duration = 1200) {
     section.classList.toggle('inverted-bg', on);
   }
 
+  // Flash constants — must match the scatter phase timing below
+  // tl total duration ≈ 11.52  (last scatter ends at 7.72+3.8)
+  // Flash fromTo: start=7.36, end=11.16  →  progress 0.638 → 0.968
+  const FLASH_P0 = 0.638;
+  const FLASH_P1 = 0.968;
+
+  gsap.set(screenFlash, { opacity: 0 });
+
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: section,
@@ -351,29 +359,32 @@ function scrambleText(el, finalText, duration = 1200) {
       pin: true,
       scrub: 1.6,
       anticipatePin: 1,
-      // NOTE: setInverted is NEVER called during scrub — post-intro is hidden under
-      // the pinned section anyway. Only flip when flash is fully covering the screen.
+      // onUpdate drives flash in BOTH directions — forward AND rewind
+      onUpdate: (self) => {
+        if (flashTween) return; // dissolve tween (post-pin) is running, leave it alone
+        const t = Math.max(0, Math.min(1, (self.progress - FLASH_P0) / (FLASH_P1 - FLASH_P0)));
+        gsap.set(screenFlash, { opacity: t * t }); // power2 ease baked in
+      },
       onLeave: () => {
-        // Pin released going down — flash is at opacity 1 from timeline end.
-        // Set sections white (covered by flash), then dissolve flash to reveal them.
+        // Pin released going down — flash is at 1, dissolve to reveal inverted sections
         if (flashTween) flashTween.kill();
         setInverted(true);
-        flashTween = gsap.to(screenFlash, { opacity: 0, duration: 1.2, ease: 'power2.inOut' });
+        flashTween = gsap.to(screenFlash, {
+          opacity: 0, duration: 1.2, ease: 'power2.inOut',
+          onComplete: () => { flashTween = null; }
+        });
       },
       onEnterBack: () => {
-        // Re-entering pin from below — sections are white, cover instantly with flash
-        // (both are white so no visible jump), then let scrub rewind flash 1→0.
+        // Re-entering pin from below — kill dissolve, cover with flash, onUpdate takes over
         if (flashTween) { flashTween.kill(); flashTween = null; }
         setInverted(true);
         gsap.set(screenFlash, { opacity: 1 });
       },
       onLeaveBack: () => {
-        // Exiting pin at the top going up — flash is near 0 from scrub rewind.
-        // Cover snap of setInverted(false) with a brief flash, then fade it out.
+        // Exiting pin upward — flash is near 0 from onUpdate, snap clean
         if (flashTween) { flashTween.kill(); flashTween = null; }
-        gsap.set(screenFlash, { opacity: 1 });
         setInverted(false);
-        flashTween = gsap.to(screenFlash, { opacity: 0, duration: 0.45, ease: 'power2.out' });
+        gsap.set(screenFlash, { opacity: 0 });
       }
     }
   });
@@ -412,14 +423,7 @@ function scrambleText(el, finalText, duration = 1200) {
     }
   });
 
-  // Flash is part of the scrubbed timeline — perfectly smooth, no fighting
-  // Starts when 't' begins scaling (7.36), reaches full opacity at the end
-  gsap.set(screenFlash, { opacity: 0 });
-  tl.fromTo(screenFlash,
-    { opacity: 0 },
-    { opacity: 1, duration: 3.8, ease: 'power2.in' },
-    7.36
-  );
+
 })();
 
 /* ─── Hero animations ──────────────────────────────────────── */
