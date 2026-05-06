@@ -474,7 +474,7 @@ function initHero() {
         opacity: 1, y: 0,
         duration: 1.1,
         ease: 'expo.out',
-        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+        scrollTrigger: { trigger: el, start: 'top 95%', toggleActions: 'play none none none' }
       }
     );
   });
@@ -486,7 +486,7 @@ function initHero() {
         opacity: 1, x: 0,
         duration: 1.1,
         ease: 'expo.out',
-        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+        scrollTrigger: { trigger: el, start: 'top 95%', toggleActions: 'play none none none' }
       }
     );
   });
@@ -499,7 +499,7 @@ function initHero() {
         duration: 1,
         ease: 'expo.out',
         delay: i * 0.06,
-        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+        scrollTrigger: { trigger: el, start: 'top 95%', toggleActions: 'play none none none' }
       }
     );
   });
@@ -516,7 +516,7 @@ function initHero() {
         duration: 0.9,
         ease: 'expo.out',
         stagger: 0.025,
-        scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' }
+        scrollTrigger: { trigger: el, start: 'top 95%', toggleActions: 'play none none none' }
       }
     );
   });
@@ -534,7 +534,7 @@ function initHero() {
         duration: 1.3,
         ease: 'expo.inOut',
         delay: i * 0.12,
-        scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none none' }
+        scrollTrigger: { trigger: card, start: 'top 95%', toggleActions: 'play none none none' }
       }
     );
 
@@ -558,7 +558,7 @@ function initHero() {
     const suffix = el.getAttribute('data-suffix') || '';
     ScrollTrigger.create({
       trigger: el,
-      start: 'top 85%',
+      start: 'top 95%',
       once: true,
       onEnter: () => {
         // Scramble digits first
@@ -587,7 +587,7 @@ function initHero() {
   document.querySelectorAll('.process-item').forEach(el => {
     ScrollTrigger.create({
       trigger: el,
-      start: 'top 85%',
+      start: 'top 95%',
       onEnter: () => el.classList.add('in-view')
     });
   });
@@ -667,7 +667,7 @@ function initHero() {
       { opacity: 0, x: -30 },
       {
         opacity: 1, x: 0, duration: 0.9, ease: 'expo.out',
-        scrollTrigger: { trigger: label, start: 'top 90%' }
+        scrollTrigger: { trigger: label, start: 'top 95%' }
       }
     );
   });
@@ -699,13 +699,13 @@ function initHero() {
   if (footerLeft) {
     gsap.fromTo(footerLeft,
       { opacity: 0, x: -60 },
-      { opacity: 1, x: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: 'footer', start: 'top 90%' } }
+      { opacity: 1, x: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: 'footer', start: 'top 95%' } }
     );
   }
   if (footerRight) {
     gsap.fromTo(footerRight,
       { opacity: 0, x: 60 },
-      { opacity: 1, x: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: 'footer', start: 'top 90%' } }
+      { opacity: 1, x: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: 'footer', start: 'top 95%' } }
     );
   }
 })();
