@@ -65,7 +65,9 @@ function scrambleText(el, finalText, duration = 1200) {
   let W, H, fontSize, textY;
   let fillProgress = 0; // 0 = empty → 1 = full
   let time         = 0;
+  let lastTs       = null;
   let animId;
+  let charWidths   = null; // cached char widths — recalculated only on setup
 
   // Bubble pool
   const bubbles = [];
@@ -89,6 +91,7 @@ function scrambleText(el, finalText, duration = 1200) {
 
     fontSize = Math.min(W * 0.275, 190);
     textY    = H * 0.79;
+    charWidths = null; // invalidate cache — will be rebuilt on next draw
   }
 
   // ── Text bounding box ──────────────────────────────────────
@@ -135,9 +138,24 @@ function scrambleText(el, finalText, duration = 1200) {
   }
 
   // ── Draw frame ─────────────────────────────────────────────
+  const CHARS = ['a','s','t','t','a'];
+
+  // Cache char widths so measureText is never called inside the draw loop
+  function cacheCharWidths() {
+    const fontStr = `800 ${fontSize}px 'Plus Jakarta Sans', sans-serif`;
+    offCtx.font      = fontStr;
+    offCtx.textAlign = 'left';
+    const totalW = offCtx.measureText('astta').width;
+    charWidths = {
+      widths:  CHARS.map(ch => offCtx.measureText(ch).width),
+      total:   totalW,
+      startX:  W / 2 - totalW / 2,
+    };
+  }
+
   // Per-character float — each letter bobs on its own sine wave
   function charFloatY(i) {
-    return Math.sin(time * 1.6 + i * 1.15) * 6;
+    return Math.sin(time * 1.1 + i * 1.15) * 5.5;
   }
 
   // Draw "astta" char-by-char so each letter can have its own Y offset
@@ -146,14 +164,12 @@ function scrambleText(el, finalText, duration = 1200) {
     context.font         = fontStr;
     context.textAlign    = 'left';
     context.textBaseline = 'alphabetic';
-    const chars  = ['a','s','t','t','a'];
-    const totalW = context.measureText('astta').width;
-    let cx = W / 2 - totalW / 2;
-    chars.forEach((ch, i) => {
+    let cx = charWidths.startX;
+    CHARS.forEach((ch, i) => {
       const y = textY + charFloatY(i);
       if (mode === 'fill')   context.fillText(ch, cx, y);
       else                   context.strokeText(ch, cx, y);
-      cx += context.measureText(ch).width;
+      cx += charWidths.widths[i];
     });
   }
 
@@ -212,8 +228,12 @@ function scrambleText(el, finalText, duration = 1200) {
   }
 
   // ── Animation loop ─────────────────────────────────────────
-  function tick() {
-    time += 0.016;
+  function tick(ts) {
+    if (lastTs === null) lastTs = ts;
+    const dt = Math.min((ts - lastTs) / 1000, 0.05); // seconds, capped at 50ms
+    lastTs = ts;
+    time += dt;
+    if (!charWidths) cacheCharWidths(); // build cache after fonts/setup are ready
     const bounds    = getBounds();
     const liquidTop = bounds.bottom - fillProgress * bounds.height;
     spawnBubble(bounds);
