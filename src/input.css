@@ -151,6 +151,7 @@ body {
 
 /* ─── Post-intro color inversion ─────────────────────────── */
 #post-intro {
+  background: #000;
   transition: filter 0.75s cubic-bezier(0.77, 0, 0.175, 1);
 }
 #post-intro.inverted {
