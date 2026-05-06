@@ -366,22 +366,23 @@ function scrambleText(el, finalText, duration = 1200) {
         gsap.set(screenFlash, { opacity: t * t }); // power2 ease baked in
       },
       onLeave: () => {
-        // Pin released going down — flash is at 1, dissolve to reveal inverted sections
+        // Pin released going down — flash=1 from onUpdate, dissolve to reveal white sections
         if (flashTween) flashTween.kill();
-        setInverted(true);
+        setInverted(true); // post-intro → white, intro-3d bg → white (all hidden by flash)
         flashTween = gsap.to(screenFlash, {
           opacity: 0, duration: 1.2, ease: 'power2.inOut',
           onComplete: () => { flashTween = null; }
         });
       },
       onEnterBack: () => {
-        // Re-entering pin from below — kill dissolve, cover with flash, onUpdate takes over
+        // Re-entering pin from below going UP
+        // flash=1 covers the visual snap, then onUpdate drives it to 0 as T rewinds
         if (flashTween) { flashTween.kill(); flashTween = null; }
-        setInverted(true);
         gsap.set(screenFlash, { opacity: 1 });
+        setInverted(false); // intro-3d bg → BLACK so rewind animation is visible on black
       },
       onLeaveBack: () => {
-        // Exiting pin upward — flash is near 0 from onUpdate, snap clean
+        // Exiting pin upward — onUpdate has driven flash to 0, just ensure clean state
         if (flashTween) { flashTween.kill(); flashTween = null; }
         setInverted(false);
         gsap.set(screenFlash, { opacity: 0 });
