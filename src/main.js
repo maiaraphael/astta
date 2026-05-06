@@ -858,10 +858,4 @@ function initHero() {
 })();
 
 /* ─── Tab FOMO title ───────────────────────────────────────── */
-(function initTabFomo() {
-  const original = document.title;
-  const away     = '👀 Ainda por aqui? — Astta';
-  document.addEventListener('visibilitychange', () => {
-    document.title = document.hidden ? away : original;
-  });
-})();
+
