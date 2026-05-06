@@ -359,7 +359,13 @@ function scrambleText(el, finalText, duration = 1200) {
   const postIntro  = document.getElementById('post-intro');
   const screenFlash = document.getElementById('screen-flash');
   let flashTween = null;
-  let isPinDone  = false; // flag: stop onUpdate from fighting the dissolve tween
+  let isPinDone  = false;
+
+  function setInverted(on) {
+    if (postIntro) postIntro.classList.toggle('inverted', on);
+    // Also invert intro-3d itself so its black bg doesn't show after pin releases
+    section.classList.toggle('inverted-bg', on);
+  }
 
   const tl = gsap.timeline({
     scrollTrigger: {
@@ -370,39 +376,38 @@ function scrambleText(el, finalText, duration = 1200) {
       scrub: 1.6,
       anticipatePin: 1,
       onUpdate: (self) => {
-        if (isPinDone) return; // pin released — let the dissolve tween run undisturbed
+        if (isPinDone) return;
         const p = self.progress;
         if (p >= 0.56) {
           const fp = Math.min(1, (p - 0.56) / 0.32);
           if (flashTween) { flashTween.kill(); flashTween = null; }
           gsap.set(screenFlash, { opacity: fp });
-          if (postIntro) postIntro.classList.add('inverted');
+          setInverted(true);
         } else {
           if (flashTween) { flashTween.kill(); flashTween = null; }
           gsap.set(screenFlash, { opacity: 0 });
-          if (postIntro) postIntro.classList.remove('inverted');
+          setInverted(false);
         }
       },
-      // Pin releases — dissolve flash to reveal inverted white sections
       onLeave: () => {
         isPinDone = true;
         if (flashTween) flashTween.kill();
-        if (postIntro) postIntro.classList.add('inverted');
-        flashTween = gsap.to(screenFlash, { opacity: 0, duration: 0.8, ease: 'power2.inOut' });
+        setInverted(true);
+        gsap.set(screenFlash, { opacity: 1 });
+        // Dissolve flash to reveal fully-white sections underneath
+        flashTween = gsap.to(screenFlash, { opacity: 0, duration: 0.9, ease: 'power2.inOut', delay: 0.05 });
       },
-      // Scrolling back up into the pin
       onEnterBack: () => {
         isPinDone = false;
         if (flashTween) { flashTween.kill(); flashTween = null; }
         gsap.set(screenFlash, { opacity: 1 });
-        if (postIntro) postIntro.classList.add('inverted');
+        setInverted(true);
       },
-      // Scrolled back above the section entirely
       onLeaveBack: () => {
         isPinDone = false;
         if (flashTween) { flashTween.kill(); flashTween = null; }
         gsap.set(screenFlash, { opacity: 0 });
-        if (postIntro) postIntro.classList.remove('inverted');
+        setInverted(false);
       }
     }
   });

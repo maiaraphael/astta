@@ -164,6 +164,11 @@ body {
   filter: invert(1);
 }
 
+/* Invert the intro-3d section background when transitioning */
+#intro-3d.inverted-bg {
+  background: #fff;
+}
+
 /* ─── Screen flash overlay ───────────────────────────────── */
 #screen-flash {
   position: fixed;
