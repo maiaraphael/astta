@@ -245,7 +245,7 @@ function scrambleText(el, finalText, duration = 1200) {
   // ── Bootstrap after fonts are ready ───────────────────────
   document.fonts.ready.then(() => {
     setup();
-    tick();
+    animId = requestAnimationFrame(tick);
 
     const prog = { val: 0 };
     gsap.to(prog, {
