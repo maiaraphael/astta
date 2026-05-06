@@ -356,14 +356,12 @@ function scrambleText(el, finalText, duration = 1200) {
   });
 
   // ── Master scroll timeline — pin starts at top top ──────────
-  const postIntro  = document.getElementById('post-intro');
+  const postIntro   = document.getElementById('post-intro');
   const screenFlash = document.getElementById('screen-flash');
   let flashTween = null;
-  let isPinDone  = false;
 
   function setInverted(on) {
     if (postIntro) postIntro.classList.toggle('inverted', on);
-    // Also invert intro-3d itself so its black bg doesn't show after pin releases
     section.classList.toggle('inverted-bg', on);
   }
 
@@ -375,39 +373,22 @@ function scrambleText(el, finalText, duration = 1200) {
       pin: true,
       scrub: 1.6,
       anticipatePin: 1,
-      onUpdate: (self) => {
-        if (isPinDone) return;
-        const p = self.progress;
-        if (p >= 0.56) {
-          const fp = Math.min(1, (p - 0.56) / 0.32);
-          if (flashTween) { flashTween.kill(); flashTween = null; }
-          gsap.set(screenFlash, { opacity: fp });
-          setInverted(true);
-        } else {
-          if (flashTween) { flashTween.kill(); flashTween = null; }
-          gsap.set(screenFlash, { opacity: 0 });
-          setInverted(false);
-        }
-      },
+      // Invert classes managed purely by enter/leave — no onUpdate fighting tweens
       onLeave: () => {
-        isPinDone = true;
-        if (flashTween) flashTween.kill();
         setInverted(true);
-        gsap.set(screenFlash, { opacity: 1 });
-        // Dissolve flash to reveal fully-white sections underneath
-        flashTween = gsap.to(screenFlash, { opacity: 0, duration: 0.9, ease: 'power2.inOut', delay: 0.05 });
+        if (flashTween) flashTween.kill();
+        // Flash is already at 1 from the timeline scrub — dissolve it
+        flashTween = gsap.to(screenFlash, { opacity: 0, duration: 1.1, ease: 'power2.inOut' });
       },
       onEnterBack: () => {
-        isPinDone = false;
+        setInverted(true);
         if (flashTween) { flashTween.kill(); flashTween = null; }
         gsap.set(screenFlash, { opacity: 1 });
-        setInverted(true);
       },
       onLeaveBack: () => {
-        isPinDone = false;
+        setInverted(false);
         if (flashTween) { flashTween.kill(); flashTween = null; }
         gsap.set(screenFlash, { opacity: 0 });
-        setInverted(false);
       }
     }
   });
@@ -445,6 +426,15 @@ function scrambleText(el, finalText, duration = 1200) {
       );
     }
   });
+
+  // Flash is part of the scrubbed timeline — perfectly smooth, no fighting
+  // Starts when 't' begins scaling (7.36), reaches full opacity at the end
+  gsap.set(screenFlash, { opacity: 0 });
+  tl.fromTo(screenFlash,
+    { opacity: 0 },
+    { opacity: 1, duration: 3.8, ease: 'power2.in' },
+    7.36
+  );
 })();
 
 /* ─── Hero animations ──────────────────────────────────────── */
