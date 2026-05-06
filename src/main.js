@@ -333,28 +333,6 @@ function scrambleText(el, finalText, duration = 1200) {
   });
   gsap.set(glow, { opacity: 0 });
 
-  // Pre-arrival: as section enters viewport, nudge chars toward center so they're
-  // already mid-flight by the time the pin locks at top top
-  ScrollTrigger.create({
-    trigger: section,
-    start: 'top 90%',
-    end: 'top top',
-    scrub: 2,
-    onUpdate: (self) => {
-      const p = self.progress;
-      charEls.forEach((ch, i) => {
-        gsap.set(ch, {
-          x: origins[i].x * (1 - p * 0.55),
-          y: origins[i].y * (1 - p * 0.55),
-          rotateZ: origins[i].rotateZ * (1 - p * 0.55),
-          scale: origins[i].scale + (1 - origins[i].scale) * p * 0.45,
-          opacity: p * 0.55,
-          filter: `blur(${35 * (1 - p * 0.5)}px)`,
-        });
-      });
-    }
-  });
-
   // ── Master scroll timeline — pin starts at top top ──────────
   const postIntro   = document.getElementById('post-intro');
   const screenFlash = document.getElementById('screen-flash');
@@ -373,23 +351,26 @@ function scrambleText(el, finalText, duration = 1200) {
       pin: true,
       scrub: 1.6,
       anticipatePin: 1,
+      onUpdate: (self) => {
+        // Keep invert state in sync with scrub position at all times
+        setInverted(self.progress >= 0.56);
+      },
       onLeave: () => {
-        // Pin released going down — dissolve flash, keep sections inverted (white)
+        // Past end scrolling down — dissolve flash to reveal inverted sections
         setInverted(true);
         if (flashTween) flashTween.kill();
         flashTween = gsap.to(screenFlash, { opacity: 0, duration: 1.1, ease: 'power2.inOut' });
       },
       onEnterBack: () => {
-        // Re-entering pin from below — kill dissolve tween, let the scrub rewind flash naturally
+        // Re-entering from below — restore flash so scrub can rewind it
         setInverted(true);
         if (flashTween) { flashTween.kill(); flashTween = null; }
-        // Do NOT force flash=1 here — scrub will drive it correctly from current value
+        gsap.set(screenFlash, { opacity: 1 });
       },
       onLeaveBack: () => {
-        // Exiting pin from the top — flash briefly to cover sections snapping back to black
+        // Exited above the pin — clean up
         setInverted(false);
         if (flashTween) { flashTween.kill(); flashTween = null; }
-        // Flash is already near 0 from scrub reverse — just ensure it's clean
         gsap.set(screenFlash, { opacity: 0 });
       }
     }
