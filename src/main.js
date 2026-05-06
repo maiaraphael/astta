@@ -373,21 +373,23 @@ function scrambleText(el, finalText, duration = 1200) {
       pin: true,
       scrub: 1.6,
       anticipatePin: 1,
-      // Invert classes managed purely by enter/leave — no onUpdate fighting tweens
       onLeave: () => {
+        // Pin released going down — dissolve flash, keep sections inverted (white)
         setInverted(true);
         if (flashTween) flashTween.kill();
-        // Flash is already at 1 from the timeline scrub — dissolve it
         flashTween = gsap.to(screenFlash, { opacity: 0, duration: 1.1, ease: 'power2.inOut' });
       },
       onEnterBack: () => {
+        // Re-entering pin from below — kill dissolve tween, let the scrub rewind flash naturally
         setInverted(true);
         if (flashTween) { flashTween.kill(); flashTween = null; }
-        gsap.set(screenFlash, { opacity: 1 });
+        // Do NOT force flash=1 here — scrub will drive it correctly from current value
       },
       onLeaveBack: () => {
+        // Exiting pin from the top — flash briefly to cover sections snapping back to black
         setInverted(false);
         if (flashTween) { flashTween.kill(); flashTween = null; }
+        // Flash is already near 0 from scrub reverse — just ensure it's clean
         gsap.set(screenFlash, { opacity: 0 });
       }
     }
