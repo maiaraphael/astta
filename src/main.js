@@ -356,7 +356,10 @@ function scrambleText(el, finalText, duration = 1200) {
   });
 
   // ── Master scroll timeline — pin starts at top top ──────────
-  const postIntro = document.getElementById('post-intro');
+  const postIntro  = document.getElementById('post-intro');
+  const screenFlash = document.getElementById('screen-flash');
+  let flashTween = null;
+
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: section,
@@ -366,15 +369,35 @@ function scrambleText(el, finalText, duration = 1200) {
       scrub: 1.6,
       anticipatePin: 1,
       onUpdate: (self) => {
-        // Centre 't' (i=2) scatter starts at ~56% of timeline
-        // Invert post-intro sections as it explodes outward
-        if (postIntro) {
-          if (self.progress >= 0.56) {
-            postIntro.classList.add('inverted');
-          } else {
-            postIntro.classList.remove('inverted');
-          }
+        const p = self.progress;
+        // Flash fades in from 0.56 → 1.0 of timeline progress
+        if (p >= 0.56) {
+          const fp = Math.min(1, (p - 0.56) / 0.32);
+          if (flashTween) { flashTween.kill(); flashTween = null; }
+          gsap.set(screenFlash, { opacity: fp });
+          if (postIntro) postIntro.classList.add('inverted');
+        } else {
+          if (flashTween) { flashTween.kill(); flashTween = null; }
+          gsap.set(screenFlash, { opacity: 0 });
+          if (postIntro) postIntro.classList.remove('inverted');
         }
+      },
+      // Pin releases — dissolve flash to reveal white sections underneath
+      onLeave: () => {
+        if (flashTween) flashTween.kill();
+        flashTween = gsap.to(screenFlash, { opacity: 0, duration: 0.8, ease: 'power2.inOut' });
+      },
+      // Scrolling back up into the section — restore flash instantly
+      onEnterBack: () => {
+        if (flashTween) { flashTween.kill(); flashTween = null; }
+        gsap.set(screenFlash, { opacity: 1 });
+        if (postIntro) postIntro.classList.add('inverted');
+      },
+      // Left the top — cleanup
+      onLeaveBack: () => {
+        if (flashTween) { flashTween.kill(); flashTween = null; }
+        gsap.set(screenFlash, { opacity: 0 });
+        if (postIntro) postIntro.classList.remove('inverted');
       }
     }
   });
@@ -398,11 +421,19 @@ function scrambleText(el, finalText, duration = 1200) {
   tl.to(glow, { opacity: 0, duration: 0.8, ease: 'power2.in' }, 6.2);
 
   // Phase 3 — Scatter: starburst exit, each char flies to its corner
+  // Centre 't' (i=2) expands to fill screen white — stays opaque to bridge into inverted sections
   charEls.forEach((ch, i) => {
-    tl.to(ch,
-      { x: exits[i].x, y: exits[i].y, rotateZ: exits[i].rotateZ, scale: exits[i].scale, opacity: 0, filter: 'blur(30px)', duration: 3.8, ease: 'power3.in' },
-      7 + i * 0.18
-    );
+    if (i === 2) {
+      tl.to(ch,
+        { scale: exits[i].scale, opacity: 1, filter: 'blur(0px)', duration: 3.8, ease: 'power3.in' },
+        7 + i * 0.18
+      );
+    } else {
+      tl.to(ch,
+        { x: exits[i].x, y: exits[i].y, rotateZ: exits[i].rotateZ, scale: exits[i].scale, opacity: 0, filter: 'blur(30px)', duration: 3.8, ease: 'power3.in' },
+        7 + i * 0.18
+      );
+    }
   });
 })();
 

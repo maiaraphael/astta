@@ -164,6 +164,17 @@ body {
   filter: invert(1);
 }
 
+/* ─── Screen flash overlay ───────────────────────────────── */
+#screen-flash {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  z-index: 8000;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+}
+
 /* ─── Scroll progress bar ────────────────────────────────── */
 #scroll-progress {
   position: fixed;
