@@ -351,27 +351,29 @@ function scrambleText(el, finalText, duration = 1200) {
       pin: true,
       scrub: 1.6,
       anticipatePin: 1,
-      onUpdate: (self) => {
-        // Keep invert state in sync with scrub position at all times
-        setInverted(self.progress >= 0.56);
-      },
+      // NOTE: setInverted is NEVER called during scrub — post-intro is hidden under
+      // the pinned section anyway. Only flip when flash is fully covering the screen.
       onLeave: () => {
-        // Past end scrolling down — dissolve flash to reveal inverted sections
-        setInverted(true);
+        // Pin released going down — flash is at opacity 1 from timeline end.
+        // Set sections white (covered by flash), then dissolve flash to reveal them.
         if (flashTween) flashTween.kill();
-        flashTween = gsap.to(screenFlash, { opacity: 0, duration: 1.1, ease: 'power2.inOut' });
+        setInverted(true);
+        flashTween = gsap.to(screenFlash, { opacity: 0, duration: 1.2, ease: 'power2.inOut' });
       },
       onEnterBack: () => {
-        // Re-entering from below — restore flash so scrub can rewind it
-        setInverted(true);
+        // Re-entering pin from below — sections are white, cover instantly with flash
+        // (both are white so no visible jump), then let scrub rewind flash 1→0.
         if (flashTween) { flashTween.kill(); flashTween = null; }
+        setInverted(true);
         gsap.set(screenFlash, { opacity: 1 });
       },
       onLeaveBack: () => {
-        // Exited above the pin — clean up
-        setInverted(false);
+        // Exiting pin at the top going up — flash is near 0 from scrub rewind.
+        // Cover snap of setInverted(false) with a brief flash, then fade it out.
         if (flashTween) { flashTween.kill(); flashTween = null; }
-        gsap.set(screenFlash, { opacity: 0 });
+        gsap.set(screenFlash, { opacity: 1 });
+        setInverted(false);
+        flashTween = gsap.to(screenFlash, { opacity: 0, duration: 0.45, ease: 'power2.out' });
       }
     }
   });
