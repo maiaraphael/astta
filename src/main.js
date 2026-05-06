@@ -359,6 +359,7 @@ function scrambleText(el, finalText, duration = 1200) {
   const postIntro  = document.getElementById('post-intro');
   const screenFlash = document.getElementById('screen-flash');
   let flashTween = null;
+  let isPinDone  = false; // flag: stop onUpdate from fighting the dissolve tween
 
   const tl = gsap.timeline({
     scrollTrigger: {
@@ -369,8 +370,8 @@ function scrambleText(el, finalText, duration = 1200) {
       scrub: 1.6,
       anticipatePin: 1,
       onUpdate: (self) => {
+        if (isPinDone) return; // pin released — let the dissolve tween run undisturbed
         const p = self.progress;
-        // Flash fades in from 0.56 → 1.0 of timeline progress
         if (p >= 0.56) {
           const fp = Math.min(1, (p - 0.56) / 0.32);
           if (flashTween) { flashTween.kill(); flashTween = null; }
@@ -382,19 +383,23 @@ function scrambleText(el, finalText, duration = 1200) {
           if (postIntro) postIntro.classList.remove('inverted');
         }
       },
-      // Pin releases — dissolve flash to reveal white sections underneath
+      // Pin releases — dissolve flash to reveal inverted white sections
       onLeave: () => {
+        isPinDone = true;
         if (flashTween) flashTween.kill();
+        if (postIntro) postIntro.classList.add('inverted');
         flashTween = gsap.to(screenFlash, { opacity: 0, duration: 0.8, ease: 'power2.inOut' });
       },
-      // Scrolling back up into the section — restore flash instantly
+      // Scrolling back up into the pin
       onEnterBack: () => {
+        isPinDone = false;
         if (flashTween) { flashTween.kill(); flashTween = null; }
         gsap.set(screenFlash, { opacity: 1 });
         if (postIntro) postIntro.classList.add('inverted');
       },
-      // Left the top — cleanup
+      // Scrolled back above the section entirely
       onLeaveBack: () => {
+        isPinDone = false;
         if (flashTween) { flashTween.kill(); flashTween = null; }
         gsap.set(screenFlash, { opacity: 0 });
         if (postIntro) postIntro.classList.remove('inverted');
