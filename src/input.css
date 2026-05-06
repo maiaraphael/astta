@@ -149,6 +149,20 @@ body {
   animation: scrollLine 2s ease-in-out infinite;
 }
 
+/* ─── Post-intro color inversion ─────────────────────────── */
+#post-intro {
+  transition: filter 0.75s cubic-bezier(0.77, 0, 0.175, 1);
+}
+#post-intro.inverted {
+  filter: invert(1);
+}
+/* Re-invert images/videos inside so they stay natural */
+#post-intro.inverted img,
+#post-intro.inverted video,
+#post-intro.inverted canvas {
+  filter: invert(1);
+}
+
 /* ─── Scroll progress bar ────────────────────────────────── */
 #scroll-progress {
   position: fixed;

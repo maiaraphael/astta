@@ -356,6 +356,7 @@ function scrambleText(el, finalText, duration = 1200) {
   });
 
   // ── Master scroll timeline — pin starts at top top ──────────
+  const postIntro = document.getElementById('post-intro');
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: section,
@@ -364,6 +365,17 @@ function scrambleText(el, finalText, duration = 1200) {
       pin: true,
       scrub: 1.6,
       anticipatePin: 1,
+      onUpdate: (self) => {
+        // Centre 't' (i=2) scatter starts at ~56% of timeline
+        // Invert post-intro sections as it explodes outward
+        if (postIntro) {
+          if (self.progress >= 0.56) {
+            postIntro.classList.add('inverted');
+          } else {
+            postIntro.classList.remove('inverted');
+          }
+        }
+      }
     }
   });
 
