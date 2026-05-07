@@ -747,6 +747,8 @@ nav {
   border-radius: 4px;
   cursor: pointer;
   background: #0a0a0a;
+  text-decoration: none;
+  display: block;
 }
 
 .work-card:first-child {
