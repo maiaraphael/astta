@@ -16,8 +16,8 @@
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-display: 'Syne', sans-serif;
 
-  --text-hero: clamp(3.5rem, 10vw, 9rem);
-  --text-section: clamp(2rem, 5vw, 4.5rem);
+  --text-hero: clamp(3.2rem, 9vw, 9rem);
+  --text-section: clamp(2.4rem, 6vw, 4.5rem);
   --text-sub: clamp(1rem, 2vw, 1.25rem);
 
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
@@ -555,14 +555,12 @@ nav {
 
 .about-title {
   font-family: var(--font-display);
-  font-size: clamp(1.55rem, 4.5vw, 4.5rem);
+  font-size: clamp(1.75rem, 4.8vw, 4.5rem);
   font-weight: 700;
   line-height: 1.12;
   letter-spacing: -0.03em;
   color: #fff;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
+  text-wrap: balance;
 }
 
 .about-title em {
@@ -627,6 +625,7 @@ nav {
   line-height: 1;
   letter-spacing: -0.03em;
   color: #fff;
+  text-wrap: balance;
 }
 
 .services-list {
@@ -733,6 +732,7 @@ nav {
   line-height: 1;
   letter-spacing: -0.03em;
   color: #fff;
+  text-wrap: balance;
 }
 
 .works-grid {
@@ -948,7 +948,7 @@ nav {
 
 .cta-title {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 8vw, 7rem);
+  font-size: clamp(2.8rem, 8vw, 7rem);
   font-weight: 700;
   line-height: 0.95;
   letter-spacing: -0.04em;
@@ -956,6 +956,7 @@ nav {
   margin-bottom: 3rem;
   position: relative;
   z-index: 1;
+  text-wrap: balance;
 }
 
 .cta-title em {
