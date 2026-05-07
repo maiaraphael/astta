@@ -2,7 +2,7 @@
 
 @theme {
   --color-black: #000000;
-  --color-white: #ffffff;
+  --color-white: #FFFAF0;
   --color-gray-950: #050505;
   --color-gray-900: #0a0a0a;
   --color-gray-800: #111111;
@@ -11,7 +11,7 @@
   --color-gray-400: #888888;
   --color-gray-300: #aaaaaa;
   --color-gray-100: #e5e5e5;
-  --color-accent: #ffffff;
+  --color-accent: #FFFAF0;
 
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-display: 'Syne', sans-serif;
@@ -34,7 +34,7 @@ html {
 
 body {
   background-color: #000;
-  color: #fff;
+  color: #FFFAF0;
   font-family: var(--font-sans);
   overflow-x: hidden;
   cursor: none;
@@ -44,7 +44,7 @@ body {
 .cursor {
   width: 12px;
   height: 12px;
-  background: #fff;
+  background: #FFFAF0;
   border-radius: 50%;
   position: fixed;
   top: 0;
@@ -109,7 +109,7 @@ body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: clamp(4rem, 19.5vw, 22rem);
   font-weight: 800;
-  color: #fff;
+  color: #FFFAF0;
   line-height: 1;
   letter-spacing: -0.035em;
   will-change: transform, opacity, filter;
@@ -165,14 +165,14 @@ body {
 
 /* Invert the intro-3d section background when transitioning */
 #intro-3d.inverted-bg {
-  background: #fff;
+  background: #FFFAF0;
 }
 
 /* ─── Screen flash overlay ───────────────────────────────── */
 #screen-flash {
   position: fixed;
   inset: 0;
-  background: #fff;
+  background: #FFFAF0;
   z-index: 8000;
   pointer-events: none;
   opacity: 0;
@@ -186,7 +186,7 @@ body {
   left: 0;
   height: 2px;
   width: 0%;
-  background: #fff;
+  background: #FFFAF0;
   z-index: 9000;
   pointer-events: none;
   transform-origin: left;
@@ -286,7 +286,7 @@ nav {
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: #FFFAF0;
   text-decoration: none;
 }
 
@@ -302,7 +302,7 @@ nav {
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #fff;
+  color: #FFFAF0;
   text-decoration: none;
   opacity: 0.6;
   transition: opacity 0.3s ease;
@@ -314,7 +314,7 @@ nav {
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #fff;
+  color: #FFFAF0;
   text-decoration: none;
   border: 1px solid rgba(255,255,255,0.3);
   padding: 0.5rem 1.25rem;
@@ -323,9 +323,9 @@ nav {
 }
 
 .nav-cta:hover {
-  background: #fff;
+  background: #FFFAF0;
   color: #000;
-  border-color: #fff;
+  border-color: #FFFAF0;
 }
 
 /* Hero */
@@ -384,7 +384,7 @@ nav {
   font-weight: 700;
   line-height: 0.9;
   letter-spacing: -0.04em;
-  color: #fff;
+  color: #FFFAF0;
   margin: 0 0 3rem;
 }
 
@@ -450,7 +450,7 @@ nav {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  background: #fff;
+  background: #FFFAF0;
   color: #000;
   font-size: 0.75rem;
   letter-spacing: 0.1em;
@@ -489,7 +489,7 @@ nav {
   transition: color 0.3s ease;
 }
 
-.btn-ghost:hover { color: #fff; }
+.btn-ghost:hover { color: #FFFAF0; }
 
 /* Marquee */
 .marquee-section {
@@ -559,7 +559,7 @@ nav {
   font-weight: 700;
   line-height: 1.12;
   letter-spacing: -0.03em;
-  color: #fff;
+  color: #FFFAF0;
   text-wrap: balance;
 }
 
@@ -593,7 +593,7 @@ nav {
   font-size: 2.5rem;
   font-weight: 700;
   letter-spacing: -0.03em;
-  color: #fff;
+  color: #FFFAF0;
   line-height: 1;
   margin-bottom: 0.25rem;
 }
@@ -624,7 +624,7 @@ nav {
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.03em;
-  color: #fff;
+  color: #FFFAF0;
   text-wrap: balance;
 }
 
@@ -671,7 +671,7 @@ nav {
   font-size: clamp(1.25rem, 3vw, 2.25rem);
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: #FFFAF0;
   transition: color 0.3s ease;
 }
 
@@ -696,8 +696,8 @@ nav {
 }
 
 .service-item:hover .service-arrow {
-  background: #fff;
-  border-color: #fff;
+  background: #FFFAF0;
+  border-color: #FFFAF0;
   transform: rotate(45deg);
 }
 
@@ -731,7 +731,7 @@ nav {
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.03em;
-  color: #fff;
+  color: #FFFAF0;
   text-wrap: balance;
 }
 
@@ -793,7 +793,7 @@ nav {
   font-size: clamp(1.25rem, 2.5vw, 2rem);
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: #FFFAF0;
 }
 
 .work-placeholder {
@@ -882,7 +882,7 @@ nav {
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: #FFFAF0;
   margin-bottom: 1rem;
 }
 
@@ -914,7 +914,7 @@ nav {
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: #FFFAF0;
   margin: 3rem 0 2rem;
 }
 
@@ -952,7 +952,7 @@ nav {
   font-weight: 700;
   line-height: 0.95;
   letter-spacing: -0.04em;
-  color: #fff;
+  color: #FFFAF0;
   margin-bottom: 3rem;
   position: relative;
   z-index: 1;
@@ -990,7 +990,7 @@ footer {
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: #FFFAF0;
   text-decoration: none;
 }
 
@@ -1031,7 +1031,7 @@ footer {
   transition: color 0.3s ease;
 }
 
-.footer-links-col a:hover { color: #fff; }
+.footer-links-col a:hover { color: #FFFAF0; }
 
 .footer-bottom {
   display: flex;
@@ -1061,7 +1061,7 @@ footer {
   transition: color 0.3s ease;
 }
 
-.footer-socials a:hover { color: #fff; }
+.footer-socials a:hover { color: #FFFAF0; }
 
 /* Reveal animations base */
 .reveal {
@@ -1158,7 +1158,7 @@ footer {
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: #FFFAF0;
   margin-bottom: 1rem;
 }
 
@@ -1194,7 +1194,7 @@ footer {
   content: attr(data-text);
   position: absolute;
   inset: 0;
-  color: #fff;
+  color: #FFFAF0;
 }
 
 .glitch::before {
@@ -1250,7 +1250,7 @@ footer {
 .ham-line {
   display: block;
   height: 1.5px;
-  background: #fff;
+  background: #FFFAF0;
   border-radius: 2px;
   transform-origin: center;
   transition: transform 0.4s cubic-bezier(0.77,0,0.175,1),
@@ -1299,7 +1299,7 @@ footer {
   font-family: var(--font-display);
   font-size: clamp(2.8rem, 11vw, 5.5rem);
   font-weight: 700;
-  color: #fff;
+  color: #FFFAF0;
   text-decoration: none;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -1317,7 +1317,7 @@ footer {
   font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #fff;
+  color: #FFFAF0;
   text-decoration: none;
   border: 1px solid rgba(255,255,255,0.35);
   padding: 0.9rem 1.75rem;
@@ -1329,7 +1329,7 @@ footer {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-.mobile-cta:hover { background: #fff; color: #000; }
+.mobile-cta:hover { background: #FFFAF0; color: #000; }
 
 .mobile-menu-foot {
   margin-top: 1.5rem;
