@@ -1209,10 +1209,10 @@ footer {
 
 /* Responsive */
 @media (max-width: 768px) {
-  nav { padding: 1.5rem; }
+  nav { padding: 1.5rem; mix-blend-mode: normal; }
   .nav-links { display: none; }
   .nav-cta  { display: none; }
-  .hamburger { display: flex; }
+  .hamburger { display: flex; position: fixed; top: 1.5rem; right: 1.5rem; }
   .hero { padding: 0 1.5rem 3rem; }
   .section { padding: 5rem 1.5rem; }
   .about-grid { grid-template-columns: 1fr; gap: 3rem; }
@@ -1237,14 +1237,17 @@ footer {
   justify-content: center;
   align-items: flex-end;
   gap: 5px;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
+  padding: 4px;
   z-index: 10001;
-  position: relative;
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  touch-action: manipulation;
 }
 
 .ham-line {
@@ -1271,7 +1274,7 @@ footer {
   position: fixed;
   inset: 0;
   background: #000;
-  z-index: 9999;
+  z-index: 10000;
   display: flex;
   flex-direction: column;
   justify-content: center;
