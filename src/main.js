@@ -447,10 +447,18 @@ function initHero() {
     '-=0.6'
   );
 
-  heroTl.fromTo(['.btn-primary', '.btn-ghost', '.hero-desc', '.hero-scroll-indicator'],
+  // Scope to hero only to avoid conflicts with CTA/other sections
+  const heroCtas = document.querySelectorAll('.hero .btn-primary, .hero .btn-ghost, .hero-desc');
+  heroTl.fromTo(heroCtas,
     { opacity: 0, y: 20 },
     { opacity: 1, y: 0, duration: 0.8, ease: 'expo.out', stagger: 0.08 },
     '-=0.5'
+  );
+
+  // Scroll indicator animated independently so it always appears
+  gsap.fromTo('.hero-scroll-indicator',
+    { opacity: 0, y: 15 },
+    { opacity: 1, y: 0, duration: 1, ease: 'expo.out', delay: 1.6 }
   );
 
   // Hero grid parallax
