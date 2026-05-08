@@ -473,8 +473,6 @@ nav {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: rgba(255,255,255,0.3);
-  opacity: 0;
-  animation: fadeInScroll 0.8s ease 2.5s forwards;
 }
 
 @keyframes fadeInScroll {
