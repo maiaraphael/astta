@@ -1,3 +1,6 @@
+/* Wait for language selection before initialising anything */
+window.__langReady.then(function () {
+
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 /* ─── Utility: split text into char spans ─────────────────── */
@@ -767,6 +770,8 @@ function initHero() {
     });
   }
 })();
+
+}); /* end window.__langReady.then */
 
 /* ─── Smooth anchor scroll ─────────────────────────────────── */
 (function initSmoothAnchors() {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" id="html-root">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,11 +13,31 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="dist/output.css" />
+
+  <!-- Language gate: create the promise before anything else executes -->
+  <script>
+    window.__langReady = new Promise(function(resolve) {
+      window.__langResolve = resolve;
+    });
+  </script>
 </head>
 <body>
 
   <!-- Noise overlay -->
   <div class="noise" aria-hidden="true"></div>
+
+  <!-- Language picker — shown before loader -->
+  <div id="lang-picker" role="dialog" aria-modal="true" aria-label="Choose language">
+    <div class="lang-picker-inner">
+      <div class="lang-logo">astta</div>
+      <p class="lang-hint">choose your language</p>
+      <div class="lang-btns">
+        <button class="lang-btn" data-lang="pt" aria-label="Português">PT</button>
+        <div class="lang-sep" aria-hidden="true"></div>
+        <button class="lang-btn" data-lang="en" aria-label="English">EN</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Scroll progress bar -->
   <div id="scroll-progress" aria-hidden="true"></div>
@@ -37,12 +57,12 @@
   <nav id="navbar" role="navigation" aria-label="Navegação principal">
     <a href="#" class="nav-logo" aria-label="Astta - Home">astta</a>
     <ul class="nav-links" role="list">
-      <li><a href="#about">Estúdio</a></li>
-      <li><a href="#services">Serviços</a></li>
-      <li><a href="#works">Trabalhos</a></li>
-      <li><a href="#process">Processo</a></li>
+      <li><a href="#about" data-en="Studio">Estúdio</a></li>
+      <li><a href="#services" data-en="Services">Serviços</a></li>
+      <li><a href="#works" data-en="Works">Trabalhos</a></li>
+      <li><a href="#process" data-en="Process">Processo</a></li>
     </ul>
-    <a href="#contact" class="nav-cta magnetic">Iniciar Projeto</a>
+    <a href="#contact" class="nav-cta magnetic" data-en="Start Project">Iniciar Projeto</a>
   </nav>
 
   <!-- Hamburger (mobile only) — fora do nav para z-index global funcionar -->
@@ -55,12 +75,12 @@
   <!-- Mobile menu overlay -->
   <div class="mobile-menu" id="mobileMenu" aria-hidden="true" role="dialog" aria-label="Menu de navegação">
     <nav class="mobile-menu-nav">
-      <a href="#about"   class="mobile-link" data-index="0">Estúdio</a>
-      <a href="#services" class="mobile-link" data-index="1">Serviços</a>
-      <a href="#works"   class="mobile-link" data-index="2">Trabalhos</a>
-      <a href="#process"  class="mobile-link" data-index="3">Processo</a>
+      <a href="#about"   class="mobile-link" data-index="0" data-en="Studio">Estúdio</a>
+      <a href="#services" class="mobile-link" data-index="1" data-en="Services">Serviços</a>
+      <a href="#works"   class="mobile-link" data-index="2" data-en="Works">Trabalhos</a>
+      <a href="#process"  class="mobile-link" data-index="3" data-en="Process">Processo</a>
     </nav>
-    <a href="#contact" class="mobile-cta">Iniciar Projeto →</a>
+    <a href="#contact" class="mobile-cta" data-en="Start Project →">Iniciar Projeto →</a>
     <div class="mobile-menu-foot">hello@astta.com.br · +55 (43) 99108-6650</div>
   </div>
 
@@ -73,34 +93,34 @@
     <div class="orb orb-2" aria-hidden="true"></div>
     <div class="orb orb-3" aria-hidden="true"></div>
 
-    <div class="hero-eyebrow" aria-hidden="true">
+    <div class="hero-eyebrow" aria-hidden="true" data-en="Digital Studio — Founded in 2022">
       Estúdio Digital — Fundado em 2022
     </div>
 
     <h1 class="hero-title">
-      <span class="line"><em class="word">Criamos</em></span>
-      <span class="line"><span class="word">Experiências</span></span>
-      <span class="line"><span class="word">Digitais</span></span>
-      <span class="line"><em class="word">Extraordinárias</em></span>
+      <span class="line"><em class="word" data-en="We Create">Criamos</em></span>
+      <span class="line"><span class="word" data-en="Extraordinary">Experiências</span></span>
+      <span class="line"><span class="word" data-en="Digital">Digitais</span></span>
+      <span class="line"><em class="word" data-en="Experiences">Extraordinárias</em></span>
     </h1>
 
     <div class="hero-bottom">
       <div class="hero-cta-group">
         <a href="#works" class="btn-primary magnetic">
-          <span>Ver Projetos</span>
+          <span data-en="View Projects">Ver Projetos</span>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
         <a href="#contact" class="btn-ghost magnetic">
-          <span>Iniciar Projeto</span>
+          <span data-en="Start Project">Iniciar Projeto</span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
             <path d="M1.5 10.5l9-9M10.5 3v7.5H3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
       </div>
 
-      <p class="hero-desc">
+      <p class="hero-desc" data-en="Stunning websites. Cutting-edge design, flawless code and experiences your users will never forget.">
         Websites incríveis. Design de vanguarda, código impecável e experiências que seus usuários nunca esquecem.
       </p>
 
@@ -149,33 +169,34 @@
 
   <!-- ABOUT -->
   <section class="section" id="about" aria-label="Sobre a Astta">
-    <div class="section-label reveal" data-num="01">Sobre o Estúdio</div>
+    <div class="section-label reveal" data-num="01" data-en="About the Studio">Sobre o Estúdio</div>
     <div class="about-grid">
       <div>
-        <h2 class="about-title split-title" data-split>
+        <h2 class="about-title split-title" data-split
+          data-en-html="We don't <em>just</em> make websites.<br>We create <span style='white-space:nowrap'><em>digital</em> experiences.</span>">
           Não fazemos <em>apenas</em> websites.<br>
           Criamos <span style="white-space:nowrap"><em>experiências</em> digitais.</span>
         </h2>
       </div>
       <div class="about-right">
-        <p class="about-text reveal">
+        <p class="about-text reveal" data-en="Astta was born in 2022 in Australia with an obsession: creating digital experiences that push the limits of what is possible on the web. Every project is a functional work of art — where cutting-edge design meets high-performance code.">
           A astta nasceu em 2022 na Austrália com uma obsessão: criar experiências digitais que desafiam os limites do que é possível na web. Cada projeto é uma obra de arte funcional — onde design de vanguarda encontra código de alta performance.
         </p>
-        <p class="about-text reveal">
+        <p class="about-text reveal" data-en="We work with brands that understand that an extraordinary website is not a cost — it is an investment that returns in prestige, conversion and memory.">
           Trabalhamos com marcas que entendem que um website extraordinário não é um custo, é um investimento que retorna em prestígio, conversão e memória.
         </p>
         <div class="stats-grid">
           <div class="stat-item reveal">
             <div class="stat-number" data-count="30">0</div>
-            <div class="stat-label">Projetos entregues</div>
+            <div class="stat-label" data-en="Projects delivered">Projetos entregues</div>
           </div>
           <div class="stat-item reveal">
             <div class="stat-number" data-count="100">0</div>
-            <div class="stat-label">% satisfação dos clientes</div>
+            <div class="stat-label" data-en="% client satisfaction">% satisfação dos clientes</div>
           </div>
           <div class="stat-item reveal">
             <div class="stat-number" data-count="5">0</div>
-            <div class="stat-label">Anos de experiência</div>
+            <div class="stat-label" data-en="Years of experience">Anos de experiência</div>
           </div>
         </div>
       </div>
@@ -199,10 +220,10 @@
   <section class="services-section" id="services" aria-label="Serviços">
     <div class="services-header">
       <div>
-        <div class="section-label reveal" data-num="02">O que fazemos</div>
-        <h2 class="services-title split-title" data-split>Serviços</h2>
+        <div class="section-label reveal" data-num="02" data-en="What we do">O que fazemos</div>
+        <h2 class="services-title split-title" data-split data-en="Services">Serviços</h2>
       </div>
-      <p class="about-text reveal" style="max-width: 280px; text-align: right;">
+      <p class="about-text reveal" style="max-width: 280px; text-align: right;" data-en="Every service is delivered with an obsession for detail and a quality standard that exceeds expectations.">
         Cada serviço é entregue com obsessão pelos detalhes e um padrão de qualidade que supera expectativas.
       </p>
     </div>
@@ -211,8 +232,8 @@
       <li class="service-item reveal-scale">
         <span class="service-num">01</span>
         <div>
-          <div class="service-name">Web Design</div>
-          <div class="service-desc">Interfaces que conquistam prêmios. Design que converte e impressiona ao mesmo tempo.</div>
+          <div class="service-name" data-en="Web Design">Web Design</div>
+          <div class="service-desc" data-en="Award-winning interfaces. Design that converts and impresses at the same time.">Interfaces que conquistam prêmios. Design que converte e impressiona ao mesmo tempo.</div>
         </div>
         <div class="service-arrow" aria-hidden="true">
           <svg viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -221,8 +242,8 @@
       <li class="service-item reveal-scale">
         <span class="service-num">02</span>
         <div>
-          <div class="service-name">Desenvolvimento Front-end</div>
-          <div class="service-desc">Código limpo, performático e acessível. 100/100 no Lighthouse é o ponto de partida.</div>
+          <div class="service-name" data-en="Front-end Development">Desenvolvimento Front-end</div>
+          <div class="service-desc" data-en="Clean, performant and accessible code. 100/100 on Lighthouse is the starting point.">Código limpo, performático e acessível. 100/100 no Lighthouse é o ponto de partida.</div>
         </div>
         <div class="service-arrow" aria-hidden="true">
           <svg viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -231,8 +252,8 @@
       <li class="service-item reveal-scale">
         <span class="service-num">03</span>
         <div>
-          <div class="service-name">Motion & Interatividade</div>
-          <div class="service-desc">Animações que narram sua história. Microinterações que criam memória afetiva.</div>
+          <div class="service-name" data-en="Motion & Interactivity">Motion & Interatividade</div>
+          <div class="service-desc" data-en="Animations that tell your story. Micro-interactions that create emotional memory.">Animações que narram sua história. Microinterações que criam memória afetiva.</div>
         </div>
         <div class="service-arrow" aria-hidden="true">
           <svg viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -241,8 +262,8 @@
       <li class="service-item reveal-scale">
         <span class="service-num">04</span>
         <div>
-          <div class="service-name">E-commerce & Plataformas</div>
-          <div class="service-desc">Lojas virtuais que vendem pela beleza e convertem pela usabilidade.</div>
+          <div class="service-name" data-en="E-commerce & Platforms">E-commerce & Plataformas</div>
+          <div class="service-desc" data-en="Online stores that sell through beauty and convert through usability.">Lojas virtuais que vendem pela beleza e convertem pela usabilidade.</div>
         </div>
         <div class="service-arrow" aria-hidden="true">
           <svg viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -251,8 +272,8 @@
       <li class="service-item reveal-scale">
         <span class="service-num">05</span>
         <div>
-          <div class="service-name">Estratégia Digital</div>
-          <div class="service-desc">SEO técnico, performance e arquitetura de informação para dominar os resultados.</div>
+          <div class="service-name" data-en="Digital Strategy">Estratégia Digital</div>
+          <div class="service-desc" data-en="Technical SEO, performance and information architecture to dominate results.">SEO técnico, performance e arquitetura de informação para dominar os resultados.</div>
         </div>
         <div class="service-arrow" aria-hidden="true">
           <svg viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H6M13 3v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -265,11 +286,11 @@
   <section class="works-section" id="works" aria-label="Projetos">
     <div class="works-header">
       <div>
-        <div class="section-label reveal" data-num="03">Portfólio</div>
-        <h2 class="works-title split-title" data-split>Projetos<br>Selecionados</h2>
+        <div class="section-label reveal" data-num="03" data-en="Portfolio">Portfólio</div>
+        <h2 class="works-title split-title" data-split data-en-html="Selected<br>Projects">Projetos<br>Selecionados</h2>
       </div>
       <a href="#contact" class="btn-ghost reveal">
-        Ver todos os projetos
+        <span data-en="View all projects">Ver todos os projetos</span>
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
           <path d="M1.5 10.5l9-9M10.5 3v7.5H3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
@@ -329,29 +350,29 @@
 
   <!-- PROCESS -->
   <section class="process-section" id="process" aria-label="Processo de trabalho">
-    <div class="section-label reveal" data-num="04">Como trabalhamos</div>
-    <h2 class="services-title split-title" data-split style="margin-bottom: 0;">Processo</h2>
+    <div class="section-label reveal" data-num="04" data-en="How we work">Como trabalhamos</div>
+    <h2 class="services-title split-title" data-split data-en="Process" style="margin-bottom: 0;">Processo</h2>
 
     <div class="process-grid">
       <div class="process-item reveal">
-        <div class="process-step">01 — Descoberta</div>
-        <div class="process-name">Imersão Total</div>
-        <div class="process-text">Entendemos profundamente seu negócio, seu público e seus objetivos antes de escrever uma linha de código ou criar um pixel.</div>
+        <div class="process-step" data-en="01 — Discovery">01 — Descoberta</div>
+        <div class="process-name" data-en="Total Immersion">Imersão Total</div>
+        <div class="process-text" data-en="We deeply understand your business, your audience and your goals before writing a single line of code or creating a pixel.">Entendemos profundamente seu negócio, seu público e seus objetivos antes de escrever uma linha de código ou criar um pixel.</div>
       </div>
       <div class="process-item reveal">
-        <div class="process-step">02 — Estratégia</div>
-        <div class="process-name">Arquitetura Digital</div>
-        <div class="process-text">Desenhamos a estrutura de informação, fluxos de usuário e estratégia de conteúdo que suportam os objetivos de negócio.</div>
+        <div class="process-step" data-en="02 — Strategy">02 — Estratégia</div>
+        <div class="process-name" data-en="Digital Architecture">Arquitetura Digital</div>
+        <div class="process-text" data-en="We map the information structure, user flows and content strategy to support your business objectives.">Desenhamos a estrutura de informação, fluxos de usuário e estratégia de conteúdo que suportam os objetivos de negócio.</div>
       </div>
       <div class="process-item reveal">
-        <div class="process-step">03 — Design</div>
-        <div class="process-name">Visão Criativa</div>
-        <div class="process-text">Criamos interfaces com identidade única. Cada detalhe é intencional — tipografia, espaço negativo, hierarquia, movimento.</div>
+        <div class="process-step" data-en="03 — Design">03 — Design</div>
+        <div class="process-name" data-en="Creative Vision">Visão Criativa</div>
+        <div class="process-text" data-en="We create interfaces with a unique identity. Every detail is intentional — typography, negative space, hierarchy, motion.">Criamos interfaces com identidade única. Cada detalhe é intencional — tipografia, espaço negativo, hierarquia, movimento.</div>
       </div>
       <div class="process-item reveal">
-        <div class="process-step">04 — Entrega</div>
-        <div class="process-name">Excelência Técnica</div>
-        <div class="process-text">Desenvolvemos com código limpo e escalável. Testamos em todos os dispositivos até a perfeição ser atingida.</div>
+        <div class="process-step" data-en="04 — Delivery">04 — Entrega</div>
+        <div class="process-name" data-en="Technical Excellence">Excelência Técnica</div>
+        <div class="process-text" data-en="We develop with clean, scalable code. We test on every device until perfection is achieved.">Desenvolvemos com código limpo e escalável. Testamos em todos os dispositivos até a perfeição ser atingida.</div>
       </div>
     </div>
   </section>
@@ -359,26 +380,27 @@
   <!-- TESTIMONIAL -->
   <section class="testimonial-section" aria-label="Depoimento">
     <div class="testimonial-inner">
-      <div class="section-label reveal" data-num="05" style="justify-content: center;">Clientes</div>
+      <div class="section-label reveal" data-num="05" style="justify-content: center;" data-en="Clients">Clientes</div>
       <blockquote class="testimonial-quote reveal">
-        "A Astta não entregou apenas um website — entregou uma <em>identidade digital</em> que transformou completamente como o mercado nos percebe."
+        <span data-en-html='"Astta didn&apos;t just deliver a website — they delivered a <em>digital identity</em> that completely transformed how the market perceives us."'>"A Astta não entregou apenas um website — entregou uma <em>identidade digital</em> que transformou completamente como o mercado nos percebe."</span>
       </blockquote>
-      <cite class="testimonial-author reveal">— Carlos Mendes, CEO da Lumina Fashion</cite>
+      <cite class="testimonial-author reveal" data-en="— Carlos Mendes, CEO of Lumina Fashion">— Carlos Mendes, CEO da Lumina Fashion</cite>
     </div>
   </section>
 
   <!-- CTA -->
   <section class="cta-section" id="contact" aria-label="Iniciar projeto">
     <div class="cta-bg" aria-hidden="true"></div>
-    <div class="section-label reveal" data-num="06" style="justify-content: center; margin-bottom: 3rem;">Vamos trabalhar juntos</div>
-    <h2 class="cta-title split-title" data-split>
+    <div class="section-label reveal" data-num="06" style="justify-content: center; margin-bottom: 3rem;" data-en="Let's work together">Vamos trabalhar juntos</div>
+    <h2 class="cta-title split-title" data-split
+      data-en-html="Ready to<br><em>impress</em><br>the world?">
       Pronto para<br>
       <em>impressionar</em><br>
       o mundo?
     </h2>
-    <p class="cta-subtitle reveal">Transformamos sua visão em uma experiência digital premiada.</p>
+    <p class="cta-subtitle reveal" data-en="We turn your vision into an award-winning digital experience.">Transformamos sua visão em uma experiência digital premiada.</p>
     <a href="mailto:hello@astta.com.br" class="btn-primary magnetic reveal" style="display: inline-flex;">
-      <span>Iniciar um Projeto</span>
+      <span data-en="Start a Project">Iniciar um Projeto</span>
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
         <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
@@ -390,24 +412,24 @@
     <div class="footer-top">
       <div>
         <a href="#" class="footer-logo" aria-label="Astta - Home">astta</a>
-        <p class="footer-desc">Estúdio digital especializado em experiências web extraordinárias. Código que impressiona, design que converte.</p>
+        <p class="footer-desc" data-en="Digital studio specialised in extraordinary web experiences. Code that impresses, design that converts.">Estúdio digital especializado em experiências web extraordinárias. Código que impressiona, design que converte.</p>
       </div>
       <div class="footer-links-group">
         <div class="footer-links-col">
-          <h4>Navegação</h4>
+          <h4 data-en="Navigation">Navegação</h4>
           <ul role="list">
-            <li><a href="#about">Estúdio</a></li>
-            <li><a href="#services">Serviços</a></li>
-            <li><a href="#works">Projetos</a></li>
-            <li><a href="#process">Processo</a></li>
+            <li><a href="#about" data-en="Studio">Estúdio</a></li>
+            <li><a href="#services" data-en="Services">Serviços</a></li>
+            <li><a href="#works" data-en="Projects">Projetos</a></li>
+            <li><a href="#process" data-en="Process">Processo</a></li>
           </ul>
         </div>
         <div class="footer-links-col">
-          <h4>Contato</h4>
+          <h4 data-en="Contact">Contato</h4>
           <ul role="list">
             <li><a href="mailto:hello@astta.com.br">hello@astta.com.br</a></li>
             <li><a href="tel:+5543991086650">+55 (43) 99108-6650</a></li>
-            <li><a href="#contact">Iniciar Projeto</a></li>
+            <li><a href="#contact" data-en="Start Project">Iniciar Projeto</a></li>
           </ul>
         </div>
         <div class="footer-links-col">
@@ -422,7 +444,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p class="footer-copy">© 2026 Astta Digital Studio. Todos os direitos reservados.</p>
+      <p class="footer-copy" data-en="© 2026 Astta Digital Studio. All rights reserved.">© 2026 Astta Digital Studio. Todos os direitos reservados.</p>
       <div class="footer-socials">
         <a href="#" rel="noopener noreferrer">Instagram</a>
         <a href="#" rel="noopener noreferrer">Behance</a>
@@ -432,6 +454,45 @@
   </footer>
 
   </div><!-- /#post-intro -->
+
+  <!-- Language picker handler — must run before GSAP/main.js -->
+  <script>
+    (function () {
+      var picker = document.getElementById('lang-picker');
+      var btns   = document.querySelectorAll('.lang-btn');
+
+      function applyLang(lang) {
+        if (lang === 'en') {
+          document.getElementById('html-root').lang = 'en';
+          document.title = 'astta studio — Digital Experiences';
+          // Plain text replacements
+          document.querySelectorAll('[data-en]').forEach(function (el) {
+            el.textContent = el.getAttribute('data-en');
+          });
+          // HTML replacements (elements with <br>, <em> etc.)
+          document.querySelectorAll('[data-en-html]').forEach(function (el) {
+            el.innerHTML = el.getAttribute('data-en-html');
+          });
+        }
+        sessionStorage.setItem('astta-lang', lang);
+      }
+
+      btns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var lang = btn.getAttribute('data-lang');
+          applyLang(lang);
+          // Animate picker out, then start the site
+          picker.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+          picker.style.opacity    = '0';
+          picker.style.transform  = 'scale(1.04)';
+          setTimeout(function () {
+            picker.style.display = 'none';
+            window.__langResolve(lang);
+          }, 560);
+        });
+      });
+    })();
+  </script>
 
   <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
