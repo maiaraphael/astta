@@ -470,32 +470,27 @@ nav {
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.35);
+  justify-content: center;
   z-index: 2;
 }
 
-@keyframes fadeInScroll {
-  to { opacity: 1; }
+.scroll-mouse {
+  width: 26px;
+  height: 40px;
+  color: rgba(255,255,255,0.45);
 }
 
-.hero-scroll-indicator .line-scroll {
-  width: 1px;
-  height: 60px;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
-  animation: scrollLine 2s ease-in-out infinite;
+.scroll-dot {
+  animation: scrollDot 1.8s ease-in-out infinite;
+  transform-origin: center;
 }
 
-@keyframes scrollLine {
-  0% { transform: scaleY(0); transform-origin: top; }
-  50% { transform: scaleY(1); transform-origin: top; }
-  51% { transform: scaleY(1); transform-origin: bottom; }
-  100% { transform: scaleY(0); transform-origin: bottom; }
+@keyframes scrollDot {
+  0%   { opacity: 1; transform: translateY(0); }
+  60%  { opacity: 0; transform: translateY(10px); }
+  61%  { opacity: 0; transform: translateY(0); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 .hero-cta-group {
