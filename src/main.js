@@ -237,41 +237,6 @@ function scrambleText(el, finalText, duration = 1200) {
   });
 })();
 
-/* ─── Custom cursor ────────────────────────────────────────── */
-(function initCursor() {
-  const cursor = document.getElementById('cursor');
-  const follower = document.getElementById('cursorFollower');
-  let mouseX = 0, mouseY = 0;
-  let followerX = 0, followerY = 0;
-
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    gsap.to(cursor, { x: mouseX, y: mouseY, duration: 0.1, ease: 'power3.out' });
-  });
-
-  function animateFollower() {
-    followerX += (mouseX - followerX) * 0.12;
-    followerY += (mouseY - followerY) * 0.12;
-    gsap.set(follower, { x: followerX, y: followerY });
-    requestAnimationFrame(animateFollower);
-  }
-  animateFollower();
-
-  const hoverTargets = document.querySelectorAll('a, button, .magnetic, .work-card, .service-item');
-  hoverTargets.forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('is-hovering'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('is-hovering'));
-  });
-
-  document.addEventListener('mouseleave', () => {
-    gsap.to([cursor, follower], { opacity: 0, duration: 0.3 });
-  });
-  document.addEventListener('mouseenter', () => {
-    gsap.to([cursor, follower], { opacity: 1, duration: 0.3 });
-  });
-})();
-
 /* ─── Magnetic buttons ─────────────────────────────────────── */
 (function initMagnetic() {
   document.querySelectorAll('.magnetic').forEach(el => {
@@ -775,6 +740,41 @@ function initHero() {
 })();
 
 }); /* end window.__langReady.then */
+
+/* ─── Custom cursor ────────────────────────────────────────── */
+(function initCursor() {
+  const cursor = document.getElementById('cursor');
+  const follower = document.getElementById('cursorFollower');
+  let mouseX = 0, mouseY = 0;
+  let followerX = 0, followerY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    gsap.to(cursor, { x: mouseX, y: mouseY, duration: 0.1, ease: 'power3.out' });
+  });
+
+  function animateFollower() {
+    followerX += (mouseX - followerX) * 0.12;
+    followerY += (mouseY - followerY) * 0.12;
+    gsap.set(follower, { x: followerX, y: followerY });
+    requestAnimationFrame(animateFollower);
+  }
+  animateFollower();
+
+  const hoverTargets = document.querySelectorAll('a, button, .magnetic, .work-card, .service-item');
+  hoverTargets.forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('is-hovering'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('is-hovering'));
+  });
+
+  document.addEventListener('mouseleave', () => {
+    gsap.to([cursor, follower], { opacity: 0, duration: 0.3 });
+  });
+  document.addEventListener('mouseenter', () => {
+    gsap.to([cursor, follower], { opacity: 1, duration: 0.3 });
+  });
+})();
 
 /* ─── Smooth anchor scroll ─────────────────────────────────── */
 (function initSmoothAnchors() {
