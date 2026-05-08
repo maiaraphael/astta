@@ -454,12 +454,7 @@ function initHero() {
     { opacity: 1, y: 0, duration: 0.8, ease: 'expo.out', stagger: 0.08 },
     '-=0.5'
   );
-
-  // Scroll indicator animated independently so it always appears
-  gsap.fromTo('.hero-scroll-indicator',
-    { opacity: 0, y: 15 },
-    { opacity: 1, y: 0, duration: 1, ease: 'expo.out', delay: 1.6 }
-  );
+  // Scroll indicator is handled by CSS animation (always reliable)
 
   // Hero grid parallax
   gsap.to('.hero-bg-grid', {
