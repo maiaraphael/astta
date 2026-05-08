@@ -528,30 +528,18 @@ function initHero() {
 
 /* ─── Work cards — clip-path wipe reveal ──────────────────── */
 (function initWorkCards() {
-  document.querySelectorAll('.work-card').forEach((card, i) => {
-    const clip = card.querySelector('.work-card-clip');
-    if (!clip) return;
-    gsap.fromTo(clip,
-      { clipPath: 'inset(100% 0 0 0)' },
+  document.querySelectorAll('.work-item').forEach((item, i) => {
+    // Scroll reveal: slide up + fade
+    gsap.fromTo(item,
+      { opacity: 0, y: 40 },
       {
-        clipPath: 'inset(0% 0 0 0)',
-        duration: 1.3,
-        ease: 'expo.inOut',
-        delay: i * 0.12,
-        scrollTrigger: { trigger: card, start: 'top 95%', toggleActions: 'play none none none' }
+        opacity: 1, y: 0,
+        duration: 0.9,
+        ease: 'expo.out',
+        delay: i * 0.1,
+        scrollTrigger: { trigger: item, start: 'top 95%', toggleActions: 'play none none none' }
       }
     );
-
-    // Tilt on hover
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width - 0.5;
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
-      gsap.to(card, { rotateY: x * 7, rotateX: -y * 7, transformPerspective: 900, duration: 0.5, ease: 'power2.out' });
-    });
-    card.addEventListener('mouseleave', () => {
-      gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.9, ease: 'elastic.out(1, 0.5)' });
-    });
   });
 })();
 
